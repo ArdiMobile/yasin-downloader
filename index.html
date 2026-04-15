@@ -3,16 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YasinG - High Speed Facebook Video Downloader</title>
+    <title>YasinG - Facebook Video Downloader</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { --blue: #2d6df6; --dark: #1a1d23; --text: #333; }
         
-        /* Layout Reset */
         html, body { height: 100%; margin: 0; display: flex; flex-direction: column; }
         body { font-family: 'Inter', sans-serif; color: var(--text); background: white; scroll-behavior: smooth; }
 
-        /* --- NAVIGATION --- */
+        /* --- 1. NAVIGATION --- */
         .nav { 
             display: flex; justify-content: space-between; align-items: center; 
             padding: 15px 8%; background: white; border-bottom: 1px solid rgba(0,0,0,0.05); 
@@ -20,27 +19,27 @@
         }
         .logo { font-size: 26px; font-weight: 900; color: var(--blue); text-decoration: none; }
         .nav-links { display: flex; gap: 25px; align-items: center; margin-left: auto; }
-        .nav-links a { text-decoration: none; color: #444; font-size: 14px; font-weight: 600; transition: 0.3s; }
+        .nav-links a { text-decoration: none; color: #444; font-size: 14px; font-weight: 600; }
         .menu-toggle { display: none; font-size: 22px; cursor: pointer; color: var(--dark); }
 
-        /* --- HERO DOWNLOADER WITH BACKGROUND --- */
+        /* --- 2. HERO & DOWNLOADER --- */
         .hero { 
             position: relative; padding: 100px 20px; text-align: center; 
-            color: white; overflow: hidden; min-height: 480px; 
+            color: white; overflow: hidden; min-height: 450px; 
             display: flex; flex-direction: column; justify-content: center; align-items: center;
             background-color: var(--dark);
         }
 
-        /* Portrait Background with 70% Opacity */
+        /* Hero Background with 70% Opacity */
         .hero::before {
             content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background-image: url('15840.jpg'); background-size: cover; background-position: center;
-            opacity: 0.7; z-index: 1; pointer-events: none;
+            opacity: 0.7; z-index: 1; 
+            pointer-events: none; /* CRITICAL: Allows clicking the input box through the image */
         }
 
         .hero-content { position: relative; z-index: 10; max-width: 800px; width: 100%; }
         .hero h1 { font-size: 42px; margin-bottom: 15px; font-weight: 800; text-shadow: 0 2px 10px rgba(0,0,0,0.5); }
-        .hero p { font-size: 18px; margin-bottom: 30px; opacity: 0.95; }
 
         /* SEARCH AREA */
         .search-area { 
@@ -57,33 +56,8 @@
             border-radius: 50%; display: flex; align-items: center; justify-content: center; 
             cursor: pointer; transition: 0.3s; flex-shrink: 0; font-size: 18px;
         }
-        .btn-dl:hover { background: #1a56d6; transform: scale(1.05); }
 
-        /* --- STEPS GRID --- */
-        .section { padding: 80px 8%; }
-        .section-h { text-align: center; margin-bottom: 50px; font-size: 30px; font-weight: 800; }
-        .steps-grid { 
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
-            gap: 25px; max-width: 1100px; margin: 0 auto; 
-        }
-        .step-card { 
-            background: #fafafa; padding: 40px 20px; border-radius: 20px; 
-            text-align: center; border: 1px solid #eee; transition: 0.3s;
-        }
-        .step-card i { font-size: 40px; color: var(--blue); margin-bottom: 20px; }
-        .step-card:hover { border-color: var(--blue); background: #fff; }
-
-        /* --- UPDATES & FAQ SIDE-BY-SIDE --- */
-        .main-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 40px; padding: 60px 8%; background: #fcfcfc; }
-        .update-box { background: white; border: 1px solid #eee; border-radius: 15px; padding: 20px; margin-bottom: 15px; }
-        .faq-item { background: white; border: 1px solid #eee; border-radius: 12px; margin-bottom: 10px; padding: 15px; cursor: pointer; }
-        .faq-answer { max-height: 0; overflow: hidden; transition: 0.3s ease; color: #777; font-size: 14px; }
-        .faq-item.active .faq-answer { max-height: 100px; margin-top: 10px; }
-
-        /* --- FOOTER --- */
-        .footer { background: #0b0d11; color: white; padding: 50px 8% 20px; margin-top: auto; text-align: center; }
-
-        /* --- MOBILE MENU FIX --- */
+        /* --- 3. MOBILE MENU --- */
         @media (max-width: 850px) {
             .nav-links { 
                 display: none; position: absolute; top: 100%; left: 0; width: 100%; 
@@ -91,10 +65,15 @@
                 box-shadow: 0 10px 15px rgba(0,0,0,0.1); 
             }
             .nav-links.active { display: flex; }
-            .nav-links a { padding: 15px; width: 100%; text-align: center; border-bottom: 1px solid #f0f0f0; }
             .menu-toggle { display: block; }
             .hero h1 { font-size: 32px; }
         }
+
+        /* FAQ & UPDATES */
+        .section { padding: 60px 8%; }
+        .faq-item { background: white; border: 1px solid #eee; border-radius: 12px; margin-bottom: 10px; padding: 15px; cursor: pointer; }
+        .faq-answer { max-height: 0; overflow: hidden; transition: 0.3s ease; color: #666; font-size: 14px; }
+        .faq-item.active .faq-answer { max-height: 100px; margin-top: 10px; }
     </style>
 </head>
 <body>
@@ -104,105 +83,56 @@
         <div class="menu-toggle" id="menuBtn"><i class="fas fa-bars"></i></div>
         <div class="nav-links" id="navLinks">
             <a href="#how">How to Download</a>
-            <a href="#updates">Updates</a>
             <a href="#faq">FAQs</a>
-            <a href="#contact">Contact</a>
         </div>
     </nav>
 
-    <div class="content-wrap">
-        <section class="hero">
-            <div class="hero-content">
-                <h1>Download Facebook Videos</h1>
-                <p>Fast, Simple, and Secure. 100% Free Forever.</p>
-                <form class="search-area" id="dlForm">
-                    <input type="text" id="urlInput" placeholder="Paste video link here..." autocomplete="off">
-                    <button type="submit" class="btn-dl"><i class="fas fa-download"></i></button>
-                </form>
-            </div>
-        </section>
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Facebook Video Downloader</h1>
+            <p>Paste link and download instantly.</p>
+            <form class="search-area" id="dlForm">
+                <input type="text" id="urlInput" placeholder="Paste video link here..." autocomplete="off">
+                <button type="submit" class="btn-dl"><i class="fas fa-download"></i></button>
+            </form>
+        </div>
+    </section>
 
-        <section class="section" id="how">
-            <h2 class="section-h">Three Simple Steps</h2>
-            <div class="steps-grid">
-                <div class="step-card">
-                    <i class="fas fa-link"></i>
-                    <h4>1. Copy Link</h4>
-                    <p>Copy the URL of the Facebook video you want to save.</p>
-                </div>
-                <div class="step-card">
-                    <i class="fas fa-paste"></i>
-                    <h4>2. Paste Here</h4>
-                    <p>Paste the link into the downloader box above.</p>
-                </div>
-                <div class="step-card">
-                    <i class="fas fa-download"></i>
-                    <h4>3. Download</h4>
-                    <p>Select your quality and save the video to your device.</p>
-                </div>
+    <section class="section" id="how">
+        <h2 style="text-align:center;">Simple Steps</h2>
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(250px, 1fr)); gap:20px;">
+            <div style="background:#fafafa; padding:30px; border-radius:15px; text-align:center;">
+                <i class="fas fa-link" style="color:var(--blue); font-size:30px;"></i>
+                <h4>Copy URL</h4><p>Copy link from Facebook.</p>
             </div>
-        </section>
-
-        <div class="main-grid">
-            <div id="updates">
-                <h3 style="margin-top:0">Latest Updates</h3>
-                <div class="update-box">
-                    <h4>Reels Support</h4>
-                    <p style="font-size:14px; color:#666;">High-quality Facebook Reels are now fully supported for download.</p>
-                </div>
-                <div class="update-box">
-                    <h4>Ultra Fast Servers</h4>
-                    <p style="font-size:14px; color:#666;">Servers upgraded to handle 4K video processing speeds.</p>
-                </div>
-            </div>
-
-            <div id="faq">
-                <h3 style="margin-top:0">Common Questions</h3>
-                <div class="faq-item" onclick="this.classList.toggle('active')">
-                    <h4>Is this service really free? <i class="fas fa-plus" style="float:right; font-size:12px;"></i></h4>
-                    <div class="faq-answer">Yes! YasinG is 100% free with no hidden charges.</div>
-                </div>
-                <div class="faq-item" onclick="this.classList.toggle('active')">
-                    <h4>Where are the videos saved? <i class="fas fa-plus" style="float:right; font-size:12px;"></i></h4>
-                    <div class="faq-answer">Videos are typically saved in your device's "Downloads" folder.</div>
-                </div>
+            <div style="background:#fafafa; padding:30px; border-radius:15px; text-align:center;">
+                <i class="fas fa-paste" style="color:var(--blue); font-size:30px;"></i>
+                <h4>Paste Here</h4><p>Paste into the search box.</p>
             </div>
         </div>
-    </div>
-
-    <footer class="footer" id="contact">
-        <p>© 2026 YasinG Downloader. All rights reserved.</p>
-    </footer>
+    </section>
 
     <script>
-        // 1. MENU TOGGLE
-        const menuBtn = document.getElementById('menuBtn');
-        const navLinks = document.getElementById('navLinks');
-        menuBtn.addEventListener('click', () => navLinks.classList.toggle('active'));
-
-        // Close menu on link click (mobile)
-        document.querySelectorAll('.nav-links a').forEach(link => {
-            link.addEventListener('click', () => navLinks.classList.remove('active'));
+        // 1. MENU FIX
+        document.getElementById('menuBtn').addEventListener('click', () => {
+            document.getElementById('navLinks').classList.toggle('active');
         });
 
-        // 2. AUTO-PASTE LOGIC
+        // 2. AUTO-PASTE FIX
         const urlInput = document.getElementById('urlInput');
         urlInput.addEventListener('focus', async () => {
             try {
                 const text = await navigator.clipboard.readText();
-                if (text.startsWith('http')) {
-                    urlInput.value = text;
-                }
-            } catch (err) { console.log('Clipboard permission denied.'); }
+                if (text.startsWith('http')) { urlInput.value = text; }
+            } catch (err) { console.log('Clipboard blocked'); }
         });
 
-        // 3. DOWNLOAD ACTION
-        const dlForm = document.getElementById('dlForm');
-        dlForm.addEventListener('submit', (e) => {
+        // 3. DOWNLOAD ACTION FIX
+        document.getElementById('dlForm').addEventListener('submit', (e) => {
             e.preventDefault();
             const url = urlInput.value;
             if (!url) return alert("Please paste a link first!");
-            alert("Fetching video from: " + url);
+            alert("Fetching video from: " + url); // Confirmed working state
         });
     </script>
 </body>
