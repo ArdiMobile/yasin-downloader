@@ -27,33 +27,30 @@
             padding: 5px; border-radius: 50px; align-items: center; box-shadow: 0 15px 35px rgba(0,0,0,0.3);
         }
         .search-area input { flex: 1; border: none; padding: 12px 20px; outline: none; font-size: 16px; border-radius: 50px; color: #333; }
-        .btn-dl { background: var(--blue); color: white; border: none; width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+        .btn-dl { background: var(--blue); color: white; border: none; width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; margin-right: 2px; }
 
         /* --- 3. STEPS SECTION --- */
         .section { padding: 80px 10%; }
         .section-h { text-align: center; margin-bottom: 50px; font-size: 28px; font-weight: 800; }
         .steps-container { max-width: 900px; margin: 0 auto; }
-        .step-card { display: flex; align-items: center; gap: 30px; background: #fff; padding: 30px; border-radius: 20px; margin-bottom: 25px; border: 1px solid #f0f0f0; }
+        .step-card { display: flex; align-items: center; gap: 30px; background: #fff; padding: 30px; border-radius: 20px; margin-bottom: 25px; border: 1px solid #f0f0f0; box-shadow: 0 4px 12px rgba(0,0,0,0.03); }
         .step-num { font-size: 40px; font-weight: 900; color: rgba(45, 109, 246, 0.1); min-width: 60px; }
 
-        /* --- 4. UPDATES SECTION (FIXED WIDTH) --- */
+        /* --- 4. UPDATES SECTION (STRICT WIDTH) --- */
         .updates-section { background: #fafafa; padding: 80px 10%; }
-        /* This prevents the stretch on desktop */
         .updates-wrapper { 
-            max-width: 700px; 
+            max-width: 650px; /* Strict desktop width */
             margin: 0 auto; 
-            display: flex; 
-            flex-direction: column; 
-            gap: 20px; 
         }
-        .update-item { background: var(--dark); color: white; border-radius: 20px; overflow: hidden; width: 100%; }
-        .up-thumb { height: 180px; background: #222; display: flex; align-items: center; justify-content: center; }
-        .up-content { padding: 25px; }
+        .update-item { background: var(--dark); color: white; border-radius: 20px; overflow: hidden; }
+        .up-thumb { height: 220px; background: #222; display: flex; align-items: center; justify-content: center; }
+        .up-content { padding: 30px; border-top: 1px solid #333; }
 
-        /* --- 5. FAQ SECTION --- */
+        /* --- 5. FAQ SECTION (RESTORED) --- */
         .faq-box { max-width: 800px; margin: 0 auto; }
         .faq-item { border-bottom: 1px solid #eee; padding: 20px 0; cursor: pointer; }
-        .faq-answer { max-height: 0; overflow: hidden; transition: 0.4s ease; color: #666; }
+        .faq-item h4 { margin: 0; display: flex; justify-content: space-between; align-items: center; font-size: 16px; }
+        .faq-answer { max-height: 0; overflow: hidden; transition: 0.4s ease; color: #666; font-size: 14px; }
         .faq-item.active .faq-answer { max-height: 200px; margin-top: 15px; }
         .faq-item .fa-minus { display: none; }
         .faq-item.active .fa-plus { display: none; }
@@ -68,6 +65,7 @@
             .nav-links { display: none; position: absolute; top: 100%; right: 0; width: 220px; background: white; flex-direction: column; padding: 20px; box-shadow: -5px 5px 15px rgba(0,0,0,0.1); }
             .nav-links.active { display: flex; }
             .menu-toggle { display: block; }
+            .step-card { flex-direction: column; text-align: center; }
         }
     </style>
 </head>
@@ -88,7 +86,7 @@
         <h1>Facebook Video Downloader</h1>
         <div class="search-area">
             <input type="text" id="urlInput" placeholder="ቪዲዮ ሊንክ እዚህ ያስገቡ...">
-            <button class="btn-dl"><i class="fas fa-download"></i></button>
+            <button class="btn-dl" onclick="startDownload()"><i class="fas fa-download"></i></button>
         </div>
     </section>
 
@@ -101,7 +99,7 @@
             </div>
             <div class="step-card">
                 <div class="step-num">02</div>
-                <div><h4>እዚህ ይለጥፉ</h4><p>ኮፒ ያደረጉትን ሊንክ ከላይ ባለው የፍለጋ ሳጥን ውስጥ ያስገቡ።</p></div>
+                <div><h4>እዚህ ይለጥፉ</h4><p>ኮፒ ያደረጉትን ሊንክ ከላይ ባለው የፍለጋ ሳጥን ውስጥ 'Paste' በማለት ያስገቡ።</p></div>
             </div>
             <div class="step-card">
                 <div class="step-num">03</div>
@@ -114,10 +112,10 @@
         <h2 class="section-h">የቅርብ ጊዜ ዜናዎች</h2>
         <div class="updates-wrapper">
             <div class="update-item">
-                <div class="up-thumb"><i class="fas fa-play-circle" style="font-size:50px; color:var(--blue);"></i></div>
+                <div class="up-thumb"><i class="fas fa-play-circle" style="font-size:60px; color:var(--blue);"></i></div>
                 <div class="up-content">
                     <h4>Reels Support</h4>
-                    <p>አሁን የፌስቡክ ሪልስ ቪዲዮዎችን በቀላሉ ማውረድ ይችላሉ።</p>
+                    <p>አሁን የፌስቡክ ሪልስ ቪዲዮዎችን በቀላሉ ማውረድ ይችላሉ። አገልግሎታችን ለሁሉም አይነት ቪዲዮዎች ክፍት ነው።</p>
                 </div>
             </div>
         </div>
@@ -130,6 +128,10 @@
                 <h4>አገልግሎቱ ነፃ ነው? <span><i class="fas fa-plus"></i><i class="fas fa-minus"></i></span></h4>
                 <div class="faq-answer"><p>አዎ! Yasingን ለመጠቀም ምንም አይነት ክፍያ አይጠበቅብዎትም::</p></div>
             </div>
+            <div class="faq-item" onclick="toggleFaq(this)">
+                <h4>ቪዲዮው የት ነው የሚቀመጠው? <span><i class="fas fa-plus"></i><i class="fas fa-minus"></i></span></h4>
+                <div class="faq-answer"><p>ብዙውን ጊዜ በስልክዎ 'Downloads' ወይም 'Gallery' ውስጥ በቀጥታ ይቀመጣል።</p></div>
+            </div>
         </div>
     </section>
 
@@ -139,6 +141,7 @@
             <div class="footer-links">
                 <a href="#">Privacy Policy</a>
                 <a href="#">Terms of Service</a>
+                <a href="#">Contact Us</a>
             </div>
         </div>
     </footer>
@@ -146,6 +149,7 @@
     <script>
         function toggleMenu() { document.getElementById('navLinks').classList.toggle('active'); }
         function toggleFaq(el) { el.classList.toggle('active'); }
+        // API connection script here...
     </script>
 </body>
 </html>
