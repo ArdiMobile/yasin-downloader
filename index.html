@@ -3,230 +3,139 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YasinG - High Speed Downloader</title>
+    <title>YasinG Downloader</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root { --blue: #2d6df6; --dark: #1a1d23; --bg: #f8f9fa; --text: #333; --glass: rgba(255, 255, 255, 0.95); }
-        body { font-family: 'Inter', sans-serif; margin: 0; color: var(--text); background: white; scroll-behavior: smooth; }
+        :root { --blue: #2d6df6; --bg-main: #fcfcfc; --border: #e6e9ef; --text-dark: #333; }
+        body { font-family: 'Inter', sans-serif; background: #fafafa; color: var(--text-dark); margin: 0; }
 
-        /* --- 1. STYLISH TOP NAVIGATION --- */
+        /* --- 1. MODERN CLIPS-STYLE NAVIGATION --- */
         .nav { 
             display: flex; justify-content: space-between; align-items: center; 
-            padding: 18px 8%; background: var(--glass); 
-            border-bottom: 1px solid rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 2000;
-            backdrop-filter: blur(10px);
+            padding: 15px 5%; background: white; border-bottom: 1px solid var(--border); 
+            position: sticky; top: 0; z-index: 2000;
         }
-        .logo { font-size: 26px; font-weight: 900; color: var(--blue); text-decoration: none; letter-spacing: -1px; }
+        .logo { color: var(--blue); font-weight: 800; font-size: 24px; text-decoration: none; display: flex; align-items: center; gap: 8px; }
         
-        .nav-links { display: flex; gap: 30px; align-items: center; }
-        .nav-links a { 
-            text-decoration: none; color: #444; font-size: 14px; font-weight: 600; 
-            transition: 0.3s; position: relative;
-        }
-        .nav-links a:hover { color: var(--blue); }
-        /* Underline effect on hover */
-        .nav-links a::after {
-            content: ''; position: absolute; width: 0; height: 2px; bottom: -5px; left: 0;
-            background-color: var(--blue); transition: 0.3s;
-        }
-        .nav-links a:hover::after { width: 100%; }
-
-        .menu-toggle { display: none; font-size: 24px; cursor: pointer; }
-
-        /* --- 2. HERO & DOWNLOADER --- */
-        .hero { background: var(--dark); color: white; padding: 100px 20px; text-align: center; }
-        .hero h1 { font-size: 36px; margin-bottom: 15px; font-weight: 800; }
-        .search-area { 
-            max-width: 600px; margin: 0 auto; display: flex; background: white; 
-            padding: 8px; border-radius: 50px; box-shadow: 0 15px 35px rgba(0,0,0,0.3);
-        }
-        .search-area input { flex: 1; border: none; padding: 15px 25px; outline: none; font-size: 16px; border-radius: 50px; }
+        .hamburger { font-size: 24px; cursor: pointer; background: none; border: none; padding: 0; }
         
-        .btn-dl { 
-            background: var(--blue); color: white; border: none; padding: 15px 35px; 
-            border-radius: 50px; font-weight: bold; cursor: pointer; transition: 0.3s;
+        /* The Clips-Style Drawer Menu */
+        .nav-menu { 
+            display: none; flex-direction: column; position: fixed; top: 0; right: 0; width: 280px; height: 100vh; 
+            background: white; z-index: 3000; box-shadow: -5px 0 15px rgba(0,0,0,0.1); border-left: 1px solid var(--border);
         }
-        .btn-dl:hover { transform: scale(1.05); background: #1a56d6; }
-        .btn-dl i { display: none; }
+        .nav-menu.active { display: flex; }
+        
+        /* Drawer Header */
+        .drawer-header { display: flex; justify-content: space-between; align-items: center; padding: 20px 25px; border-bottom: 1px solid var(--border); }
+        .drawer-title { color: var(--blue); font-weight: 700; font-size: 18px; }
+        .close-btn { background: none; border: none; font-size: 20px; color: var(--blue); cursor: pointer; }
 
-        /* --- 3. VIDEO RESULT & RESET --- */
-        #resultArea { 
-            display: none; max-width: 500px; margin: -50px auto 40px; background: white; 
-            padding: 25px; border-radius: 24px; border: 1px solid #eee; 
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1); text-align: center; z-index: 10; position: relative;
+        /* Drawer Links */
+        .nav-menu a { 
+            color: var(--text-dark); padding: 18px 25px; text-decoration: none; 
+            font-size: 15px; border-bottom: 1px solid var(--border); transition: 0.3s;
         }
-        video { width: 100%; border-radius: 15px; border: 4px solid #f0f0f0; margin-bottom: 15px; }
-        .btn-another { 
-            background: #f0f2f5; border: none; padding: 12px 25px; border-radius: 50px; 
-            color: #555; cursor: pointer; font-size: 13px; font-weight: 600; margin-top: 20px;
+        .nav-menu a:hover { background: #f8f9fa; color: var(--blue); }
+
+        /* Background Overlay when menu is open */
+        .overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 2500; }
+        .overlay.active { display: block; }
+
+        /* Main Container */
+        .container { max-width: 450px; margin: 30px auto; padding: 0 15px; }
+        .main-card { background: white; border-radius: 20px; padding: 25px; border: 1px solid var(--border); text-align: center; }
+
+        /* --- 2. PERFECTLY FITTED DOWNLOAD BOX --- */
+        .search-container { 
+            background: white; border-radius: 50px; display: flex; padding: 5px; 
+            margin: 25px 0; border: 1px solid var(--border); overflow: hidden; height: 50px;
         }
-
-        /* --- 4. SECTIONS (ALL SAVED) --- */
-        .section { padding: 80px 10%; }
-        .section-h { text-align: center; margin-bottom: 50px; font-size: 28px; font-weight: 800; }
-
-        /* Steps Staggered Layout */
-        .step-card { 
-            display: flex; align-items: center; gap: 30px; background: #fff; 
-            padding: 30px; border-radius: 20px; margin-bottom: 25px; border: 1px solid #f0f0f0;
+        .search-container input { 
+            flex: 1; border: none; padding: 0 15px; outline: none; font-size: 14px; color: #555;
         }
-        .step-num { 
-            font-size: 40px; font-weight: 900; color: rgba(45, 109, 246, 0.1); 
-            min-width: 60px; text-align: center; 
+        .btn-download-fit { 
+            background: var(--blue); color: white; border: none; width: 60px; height: 50px; 
+            border-radius: 0 50px 50px 0; cursor: pointer; display: flex; align-items: center; justify-content: center; margin: -5px -5px -5px 0; /* Adjust fit */
         }
+        .btn-download-fit i { font-size: 20px; }
 
-        /* Updates with Video Vibe */
-        .updates-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
-        .update-item { 
-            background: var(--dark); color: white; border-radius: 20px; overflow: hidden; 
-            display: flex; flex-direction: column; transition: 0.3s;
-        }
-        .up-thumb { height: 160px; background: #222; display: flex; align-items: center; justify-content: center; position: relative; }
-        .up-thumb i { font-size: 40px; color: var(--blue); opacity: 0.8; }
-        .up-content { padding: 20px; }
+        /* --- 3. THE LOADING SPINNER (Fixed) --- */
+        #loader { display: none; margin: 20px auto; border: 3px solid #eee; border-top: 3px solid var(--blue); border-radius: 50%; width: 25px; height: 25px; animation: spin 1s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        /* FAQs */
-        .faq-box { max-width: 800px; margin: 0 auto; }
-        .faq-item { border-bottom: 1px solid #eee; padding: 20px 0; cursor: pointer; }
-        .faq-item h4 { margin: 0 0 10px 0; display: flex; justify-content: space-between; align-items: center; }
+        /* Results & Video */
+        .preview-box { width: 100%; border-radius: 15px; overflow: hidden; margin-top: 20px; display: none; border: 1px solid var(--border); }
+        video { width: 100%; background: #000; display: block; }
+        .info-badge { background: rgba(45, 109, 246, 0.1); border: 1px solid var(--blue); color: var(--blue); padding: 5px 12px; border-radius: 20px; font-size: 11px; display: inline-block; margin-top: 15px; font-weight: bold; }
+        .dl-link { display: block; background: #22262e; color: white; text-decoration: none; padding: 15px; border-radius: 10px; margin-top: 10px; font-weight: bold; font-size: 14px; }
 
-        /* --- 5. FOOTER --- */
-        .footer { background: #0b0d11; color: white; padding: 80px 10% 40px; }
-        .footer-content { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 50px; }
-        .socials { display: flex; gap: 20px; margin-top: 20px; }
-        .socials a { color: white; font-size: 20px; opacity: 0.6; transition: 0.3s; }
-        .socials a:hover { opacity: 1; color: var(--blue); }
+        /* Steps */
+        .steps { display: flex; flex-direction: column; gap: 15px; margin-top: 30px; }
+        .step { background: white; padding: 20px; border-radius: 15px; display: flex; align-items: center; gap: 15px; border: 1px solid var(--border); }
+        .step i { color: var(--blue); font-size: 20px; width: 30px; text-align: center; }
 
-        /* MOBILE FIXES */
-        @media (max-width: 768px) {
-            .nav-links { 
-                display: none; position: absolute; top: 100%; right: 5%; width: 220px; 
-                background: white; flex-direction: column; padding: 20px; border-radius: 15px;
-                box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: right;
-            }
-            .nav-links.active { display: flex; }
-            .menu-toggle { display: block; }
-            .btn-dl span { display: none; }
-            .btn-dl i { display: block; }
-            .step-card { flex-direction: column; text-align: center; }
-        }
+        /* Footer */
+        .footer { padding: 40px 15px; border-top: 1px solid var(--border); text-align: center; margin-top: 40px; font-size: 12px; color: #aaa; }
     </style>
 </head>
 <body>
 
+    <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+
     <nav class="nav">
-        <a href="/" class="logo">YasinG</a>
-        <div class="menu-toggle" onclick="toggleMenu()"><i class="fas fa-bars"></i></div>
-        <div class="nav-links" id="navLinks">
-            <a href="#how">እንዴት እንደሚሰራ</a>
-            <a href="#updates">ዜናዎች</a>
-            <a href="#faq">ጥያቄዎች</a>
-            <a href="#contact">አግኙን</a>
+        <a href="/" class="logo"><i class="fab fa-facebook"></i> YasinG</a>
+        <button class="hamburger" onclick="toggleMenu()"><i class="fas fa-bars"></i></button>
+        
+        <div class="nav-menu" id="navMenu">
+            <div class="drawer-header">
+                <span class="drawer-title">YasinG</span>
+                <button class="close-btn" onclick="toggleMenu()"><i class="fas fa-arrow-left"></i></button>
+            </div>
+            <a href="#">እንዴት እንደሚሰራ</a>
+            <a href="#">ዜናዎች</a>
+            <a href="#">ጥያቄዎች</a>
+            <a href="#" style="border-top: 10px solid #f8f9fa;">Login</a>
+            <a href="#">Signup</a>
+            <a href="#">Contact Us</a>
         </div>
     </nav>
 
-    <section class="hero">
-        <h1>Facebook Video Downloader</h1>
-        <p>ቀላል፣ ፈጣን እና ጥራት ያለው የቪዲዮ ማውረጃ</p>
-        <div class="search-area">
-            <input type="text" id="urlInput" placeholder="ቪዲዮ ሊንክ እዚህ ያስገቡ..." onfocus="autoPaste()">
-            <button class="btn-dl" onclick="startDownload()">
-                <span>Download Now</span>
-                <i class="fas fa-download"></i>
-            </button>
-        </div>
-    </section>
+    <div class="container">
+        <div class="main-card">
+            <h2 style="font-size: 22px; margin-top: 0;">ቪዲዮ ማውረጃ</h2>
+            
+            <div class="search-container">
+                <input type="text" id="urlInput" placeholder="ቪዲዮ ሊንክ እዚህ ያስገቡ..." onfocus="autoPaste()">
+                <button class="btn-download-fit" onclick="startDownload()">
+                    <i class="fas fa-download"></i>
+                </button>
+            </div>
 
-    <div id="resultArea">
-        <video id="videoPlayer" controls poster="/api/placeholder/400/225"></video>
-        <div id="dlLinks"></div>
-        <button class="btn-another" onclick="location.reload()">🔄 Download Another Video</button>
+            <div id="loader"></div>
+
+            <div id="previewBox" class="preview-box">
+                <video id="videoPlayer" controls poster="poster_url_here"></video>
+            </div>
+            <div id="results"></div>
+        </div>
+
+        <div class="steps">
+            <div class="step"><i class="fas fa-link"></i><span>ሊንኩን ኮፒ ያድርጉ</span></div>
+            <div class="step"><i class="fas fa-paste"></i><span>እዚህ ይለጥፉ</span></div>
+            <div class="step"><i class="fas fa-download"></i><span>ቪዲዮውን ያውርዱ</span></div>
+        </div>
     </div>
 
-    <section class="section" id="how">
-        <h2 class="section-h">እንዴት ማውረድ ይቻላል?</h2>
-        <div class="step-card">
-            <div class="step-num">01</div>
-            <div>
-                <h4>ሊንኩን ኮፒ ያድርጉ</h4>
-                <p>ሊያወርዱት የፈለጉትን ቪዲዮ 'Copy Link' የሚለውን በመጫን ሊንኩን ይያዙ።</p>
-            </div>
-        </div>
-        <div class="step-card">
-            <div class="step-num">02</div>
-            <div>
-                <h4>እዚህ ይለጥፉ</h4>
-                <p>ኮፒ ያደረጉትን ሊንክ ከላይ ባለው የፍለጋ ሳጥን ውስጥ ያስገቡ።</p>
-            </div>
-        </div>
-        <div class="step-card">
-            <div class="step-num">03</div>
-            <div>
-                <h4>ቪዲዮውን ያውርዱ</h4>
-                <p>የሚፈልጉትን የጥራት ደረጃ በመምረጥ 'Download' የሚለውን ይጫኑ።</p>
-            </div>
-        </div>
-    </section>
-
-    <section class="section" style="background: #fafafa;" id="updates">
-        <h2 class="section-h">የቅርብ ጊዜ ዜናዎች</h2>
-        <div class="updates-grid">
-            <div class="update-item">
-                <div class="up-thumb"><i class="fas fa-play-circle"></i></div>
-                <div class="up-content">
-                    <h4>4K Reels Support</h4>
-                    <p>አሁን ማንኛውንም የፌስቡክ ሪልስ በከፍተኛ ጥራት ማውረድ ይችላሉ።</p>
-                </div>
-            </div>
-            <div class="update-item">
-                <div class="up-thumb"><i class="fas fa-mobile-alt"></i></div>
-                <div class="up-content">
-                    <h4>Fast Mobile UI</h4>
-                    <p>ለስልክ ተጠቃሚዎች ምቹ እና ፈጣን የሆነ አዲስ ገጽታ ይዘን መጥተናል።</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="section" id="faq">
-        <h2 class="section-h">ተደጋጋሚ ጥያቄዎች</h2>
-        <div class="faq-box">
-            <div class="faq-item" onclick="this.classList.toggle('active')">
-                <h4>አገልግሎቱ ነፃ ነው? <i class="fas fa-plus"></i></h4>
-                <p>አዎ! Yasingን ለመጠቀም ምንም አይነት ክፍያ አይጠበቅብዎትም።</p>
-            </div>
-            <div class="faq-item">
-                <h4>ቲክቶክ ይደግፋል? <i class="fas fa-plus"></i></h4>
-                <p>አዎ! ፌስቡክን ጨምሮ የተለያዩ የማህበራዊ ገጾችን ይደግፋል።</p>
-            </div>
-        </div>
-    </section>
-
-    <footer class="footer" id="contact">
-        <div class="footer-content">
-            <div>
-                <h3 style="color:var(--blue)">YasinG</h3>
-                <p style="opacity:0.6; font-size:13px;">ከማንኛውም የማህበራዊ ሚዲያ ቪዲዮዎችን በቀላሉ ለማውረድ የሚረዳ ምርጥ ድህረ ገጽ።</p>
-                <div class="socials">
-                    <a href="#"><i class="fab fa-facebook"></i></a>
-                    <a href="#"><i class="fab fa-telegram"></i></a>
-                    <a href="#"><i class="fab fa-instagram"></i></a>
-                </div>
-            </div>
-            <div>
-                <h4>ጠቃሚ ሊንኮች</h4>
-                <p><a href="#" style="color:#888; text-decoration:none">Privacy Policy</a></p>
-                <p><a href="#" style="color:#888; text-decoration:none">Terms of Service</a></p>
-            </div>
-        </div>
-        <div style="text-align:center; margin-top:50px; opacity:0.3; font-size:11px;">
-            © 2026 YasinG Downloader. All rights reserved.
-        </div>
-    </footer>
+    <div class="footer">
+        © 2026 YasinG Downloader. All rights reserved.
+    </div>
 
     <script>
+        // 1. Clips-Style Drawer Menu Logic
         function toggleMenu() {
-            document.getElementById('navLinks').classList.toggle('active');
+            document.getElementById('navMenu').classList.toggle('active');
+            document.getElementById('overlay').classList.toggle('active');
         }
 
         async function autoPaste() {
@@ -238,27 +147,33 @@
 
         async function startDownload() {
             const url = document.getElementById('urlInput').value;
-            const resArea = document.getElementById('resultArea');
+            const resArea = document.getElementById('results');
+            const loader = document.getElementById('loader');
+            const preview = document.getElementById('previewBox');
             if(!url) return;
+
+            // 3. Show Loader Spinner
+            loader.style.display = "block";
+            resArea.innerHTML = "";
+            preview.style.display = "none";
 
             try {
                 const res = await fetch(`/api/info?url=${encodeURIComponent(url)}`);
                 const data = await res.json();
                 
-                if(data.error) { alert(data.error); return; }
+                // Hide Loader when data arrives
+                loader.style.display = "none";
 
-                resArea.style.display = "block";
+                if(data.error) { resArea.innerHTML=`<p style="color:red; font-size:12px">${data.error}</p>`; return; }
+
+                preview.style.display = "block";
                 document.getElementById('videoPlayer').src = data.formats[0].url;
-                
-                let html = `<h4 style="margin:15px 0;">${data.title}</h4>`;
+                let html = `<div class="info-badge">Video by: ${data.uploader}</div><p style="font-size:12px; color:#999; margin:10px 0;">${data.title}</p>`;
                 data.formats.forEach(f => {
-                    html += `<a href="${f.url}" target="_blank" style="display:block; background:var(--blue); color:white; text-decoration:none; padding:12px; border-radius:10px; margin-bottom:10px; font-weight:bold; text-align:center;">Download ${f.quality}</a>`;
+                    html += `<a href="${f.url}" target="_blank" class="dl-link">Download ${f.quality}</a>`;
                 });
-                document.getElementById('dlLinks').innerHTML = html;
-                
-                // Scroll to result smoothly
-                resArea.scrollIntoView({ behavior: 'smooth' });
-            } catch (e) { alert("Error connecting to server."); }
+                resArea.innerHTML = html;
+            } catch(e) { loader.style.display="none"; resDiv.innerHTML="Server connection error."; }
         }
     </script>
 </body>
