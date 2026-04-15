@@ -6,75 +6,68 @@
     <title>YasinG - High Speed Downloader</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root { --blue: #2d6df6; --dark: #1a1d23; --bg: #f8f9fa; --text: #333; --glass: rgba(255, 255, 255, 0.95); }
+        :root { --blue: #2d6df6; --dark: #1a1d23; --bg: #f8f9fa; --text: #333; }
         body { font-family: 'Inter', sans-serif; margin: 0; color: var(--text); background: white; scroll-behavior: smooth; }
 
-        /* --- 1. STYLISH TOP NAVIGATION --- */
+        /* --- 1. TOP NAVIGATION --- */
         .nav { 
             display: flex; justify-content: space-between; align-items: center; 
-            padding: 15px 8%; background: white; 
-            border-bottom: 1px solid rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 2000;
-            width: 100%; box-sizing: border-box;
+            padding: 15px 8%; background: white; border-bottom: 1px solid rgba(0,0,0,0.05); 
+            position: sticky; top: 0; z-index: 2000; width: 100%; box-sizing: border-box;
         }
-        .logo { font-size: 26px; font-weight: 900; color: var(--blue); text-decoration: none; letter-spacing: -1px; }
+        .logo { font-size: 26px; font-weight: 900; color: var(--blue); text-decoration: none; }
         .nav-links { display: flex; gap: 30px; align-items: center; margin-left: auto; }
-        .nav-links a { text-decoration: none; color: #444; font-size: 14px; font-weight: 600; transition: 0.3s; position: relative; }
-        .nav-links a:hover { color: var(--blue); }
-        .menu-toggle { display: none; font-size: 24px; cursor: pointer; color: var(--text); }
+        .nav-links a { text-decoration: none; color: #444; font-size: 14px; font-weight: 600; }
+        .menu-toggle { display: none; font-size: 24px; cursor: pointer; }
 
         /* --- 2. HERO & FITTED DOWNLOADER --- */
         .hero { background: var(--dark); color: white; padding: 100px 20px; text-align: center; }
-        .hero h1 { font-size: 32px; margin-bottom: 15px; font-weight: 800; }
         .search-area { 
             max-width: 600px; margin: 0 auto; display: flex; background: white; 
-            padding: 5px; border-radius: 50px; position: relative;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.3); align-items: center;
+            padding: 5px; border-radius: 50px; align-items: center; box-shadow: 0 15px 35px rgba(0,0,0,0.3);
         }
         .search-area input { flex: 1; border: none; padding: 12px 20px; outline: none; font-size: 16px; border-radius: 50px; color: #333; }
-        .btn-dl { background: var(--blue); color: white; border: none; width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.3s; margin-right: 2px; }
-        .btn-dl:hover { background: #1a56d6; transform: scale(1.05); }
+        .btn-dl { background: var(--blue); color: white; border: none; width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; }
 
-        #loader { display: none; margin: 20px auto; border: 4px solid #f3f3f3; border-top: 4px solid var(--blue); border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-        #resultArea { display: none; max-width: 500px; margin: -50px auto 40px; background: white; padding: 25px; border-radius: 24px; border: 1px solid #eee; box-shadow: 0 20px 40px rgba(0,0,0,0.1); text-align: center; z-index: 10; position: relative; }
-        video { width: 100%; border-radius: 15px; border: 4px solid #f0f0f0; margin-bottom: 15px; }
-
-        /* --- 3. SECTIONS --- */
+        /* --- 3. STEPS SECTION --- */
         .section { padding: 80px 10%; }
         .section-h { text-align: center; margin-bottom: 50px; font-size: 28px; font-weight: 800; }
-
-        /* Steps Section */
         .steps-container { max-width: 900px; margin: 0 auto; }
         .step-card { display: flex; align-items: center; gap: 30px; background: #fff; padding: 30px; border-radius: 20px; margin-bottom: 25px; border: 1px solid #f0f0f0; }
         .step-num { font-size: 40px; font-weight: 900; color: rgba(45, 109, 246, 0.1); min-width: 60px; }
 
-        /* Updates Section - Fitted for Desktop */
-        .updates-container { max-width: 800px; margin: 0 auto; }
-        .update-item { background: var(--dark); color: white; border-radius: 20px; overflow: hidden; margin-bottom: 20px; }
-        .up-thumb { height: 200px; background: #222; display: flex; align-items: center; justify-content: center; position: relative; }
-        .up-content { padding: 25px; text-align: left; }
+        /* --- 4. UPDATES SECTION (FIXED WIDTH) --- */
+        .updates-section { background: #fafafa; padding: 80px 10%; }
+        /* This prevents the stretch on desktop */
+        .updates-wrapper { 
+            max-width: 700px; 
+            margin: 0 auto; 
+            display: flex; 
+            flex-direction: column; 
+            gap: 20px; 
+        }
+        .update-item { background: var(--dark); color: white; border-radius: 20px; overflow: hidden; width: 100%; }
+        .up-thumb { height: 180px; background: #222; display: flex; align-items: center; justify-content: center; }
+        .up-content { padding: 25px; }
 
-        /* FAQ Section */
+        /* --- 5. FAQ SECTION --- */
         .faq-box { max-width: 800px; margin: 0 auto; }
         .faq-item { border-bottom: 1px solid #eee; padding: 20px 0; cursor: pointer; }
-        .faq-item h4 { margin: 0; display: flex; justify-content: space-between; align-items: center; font-size: 16px; }
-        .faq-answer { max-height: 0; overflow: hidden; transition: 0.4s ease; color: #666; font-size: 14px; }
+        .faq-answer { max-height: 0; overflow: hidden; transition: 0.4s ease; color: #666; }
         .faq-item.active .faq-answer { max-height: 200px; margin-top: 15px; }
         .faq-item .fa-minus { display: none; }
         .faq-item.active .fa-plus { display: none; }
         .faq-item.active .fa-minus { display: inline-block; color: var(--blue); }
 
-        /* --- 4. FOOTER --- */
+        /* --- 6. FOOTER --- */
         .footer { background: #0b0d11; color: white; padding: 60px 10% 30px; }
-        .footer-content { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 30px; max-width: 1200px; margin: 0 auto; }
+        .footer-content { display: flex; justify-content: space-between; flex-wrap: wrap; max-width: 1200px; margin: 0 auto; }
         .footer-links a { color: #888; text-decoration: none; display: block; margin-bottom: 8px; font-size: 14px; }
 
         @media (max-width: 768px) {
             .nav-links { display: none; position: absolute; top: 100%; right: 0; width: 220px; background: white; flex-direction: column; padding: 20px; box-shadow: -5px 5px 15px rgba(0,0,0,0.1); }
             .nav-links.active { display: flex; }
-            .menu-toggle { display: block; margin-left: auto; }
-            .up-thumb { height: 160px; }
+            .menu-toggle { display: block; }
         }
     </style>
 </head>
@@ -93,59 +86,38 @@
 
     <section class="hero">
         <h1>Facebook Video Downloader</h1>
-        <p>ቀላል፣ ፈጣን እና ጥራት ያለው የቪዲዮ ማውረጃ</p>
         <div class="search-area">
-            <input type="text" id="urlInput" placeholder="ቪዲዮ ሊንክ እዚህ ያስገቡ..." onfocus="autoPaste()">
-            <button class="btn-dl" onclick="startDownload()">
-                <i class="fas fa-download"></i>
-            </button>
+            <input type="text" id="urlInput" placeholder="ቪዲዮ ሊንክ እዚህ ያስገቡ...">
+            <button class="btn-dl"><i class="fas fa-download"></i></button>
         </div>
-        <div id="loader"></div>
     </section>
-
-    <div id="resultArea">
-        <video id="videoPlayer" controls></video>
-        <div id="dlLinks"></div>
-        <button onclick="location.reload()" style="background:#f0f2f5; border:none; padding:10px 20px; border-radius:50px; cursor:pointer; margin-top:15px; font-weight:600;">🔄 Download Another</button>
-    </div>
 
     <section class="section" id="how">
         <h2 class="section-h">እንዴት ማውረድ ይቻላል?</h2>
         <div class="steps-container">
             <div class="step-card">
                 <div class="step-num">01</div>
-                <div>
-                    <h4>ሊንኩን ኮፒ ያድርጉ</h4>
-                    <p>ሊያወርዱት የፈለጉትን ቪዲዮ 'Copy Link' በማድረግ ሊንኩን ይያዙ።</p>
-                </div>
+                <div><h4>ሊንኩን ኮፒ ያድርጉ</h4><p>ሊያወርዱት የፈለጉትን ቪዲዮ 'Copy Link' በማድረግ ሊንኩን ይያዙ።</p></div>
             </div>
             <div class="step-card">
                 <div class="step-num">02</div>
-                <div>
-                    <h4>እዚህ ይለጥፉ</h4>
-                    <p>ኮፒ ያደረጉትን ሊንክ ከላይ ባለው የፍለጋ ሳጥን ውስጥ 'Paste' በማለት ያስገቡ።</p>
-                </div>
+                <div><h4>እዚህ ይለጥፉ</h4><p>ኮፒ ያደረጉትን ሊንክ ከላይ ባለው የፍለጋ ሳጥን ውስጥ ያስገቡ።</p></div>
             </div>
             <div class="step-card">
                 <div class="step-num">03</div>
-                <div>
-                    <h4>ጥራት ይምረጡና ያውርዱ</h4>
-                    <p>የሚፈልጉትን የቪዲዮ ጥራት በመምረጥ የማውረጃ ቁልፉን ይጫኑ።</p>
-                </div>
+                <div><h4>ጥራት መርጠው ያውርዱ</h4><p>የሚፈልጉትን ጥራት መርጠው የቪዲዮ ፋይሉን ያውርዱ።</p></div>
             </div>
         </div>
     </section>
 
-    <section class="section" style="background: #fafafa;" id="updates">
+    <section class="updates-section" id="updates">
         <h2 class="section-h">የቅርብ ጊዜ ዜናዎች</h2>
-        <div class="updates-container">
+        <div class="updates-wrapper">
             <div class="update-item">
-                <div class="up-thumb">
-                    <i class="fas fa-play-circle" style="font-size:60px; color:var(--blue); z-index:1;"></i>
-                </div>
+                <div class="up-thumb"><i class="fas fa-play-circle" style="font-size:50px; color:var(--blue);"></i></div>
                 <div class="up-content">
                     <h4>Reels Support</h4>
-                    <p>አሁን የፌስቡክ ሪልስ ቪዲዮዎችን በቀላሉ እና በከፍተኛ ጥራት ማውረድ ይችላሉ። አገልግሎታችን ለሁሉም አይነት ቪዲዮዎች ክፍት ነው።</p>
+                    <p>አሁን የፌስቡክ ሪልስ ቪዲዮዎችን በቀላሉ ማውረድ ይችላሉ።</p>
                 </div>
             </div>
         </div>
@@ -156,69 +128,24 @@
         <div class="faq-box">
             <div class="faq-item" onclick="toggleFaq(this)">
                 <h4>አገልግሎቱ ነፃ ነው? <span><i class="fas fa-plus"></i><i class="fas fa-minus"></i></span></h4>
-                <div class="faq-answer">
-                    <p>አዎ! Yasingን ለመጠቀም ምንም አይነት ክፍያ አይጠበቅብዎትም::</p>
-                </div>
-            </div>
-            <div class="faq-item" onclick="toggleFaq(this)">
-                <h4>ቪዲዮው የት ነው የሚቀመጠው? <span><i class="fas fa-plus"></i><i class="fas fa-minus"></i></span></h4>
-                <div class="faq-answer">
-                    <p>ብዙውን ጊዜ በስልክዎ 'Downloads' ወይም 'Gallery' ፎልደር ውስጥ በቀጥታ ይቀመጣል።</p>
-                </div>
+                <div class="faq-answer"><p>አዎ! Yasingን ለመጠቀም ምንም አይነት ክፍያ አይጠበቅብዎትም::</p></div>
             </div>
         </div>
     </section>
 
     <footer class="footer" id="contact">
         <div class="footer-content">
-            <div class="footer-logo">
-                <h3 style="color:var(--blue); margin:0 0 10px 0;">YasinG</h3>
-                <p style="color:#666; font-size:13px; max-width:250px; margin:0;">ምርጥ የማህበራዊ ሚዲያ ቪዲዮ ማውረጃ።</p>
-            </div>
+            <div><h3 style="color:var(--blue); margin:0;">YasinG</h3><p style="color:#666; font-size:13px;">ምርጥ የማህበራዊ ሚዲያ ቪዲዮ ማውረጃ።</p></div>
             <div class="footer-links">
                 <a href="#">Privacy Policy</a>
                 <a href="#">Terms of Service</a>
-                <a href="#">Contact Us</a>
             </div>
         </div>
-        <p style="text-align:center; margin-top:40px; color:#444; font-size:11px;">© 2026 YasinG Downloader. All rights reserved.</p>
     </footer>
 
     <script>
         function toggleMenu() { document.getElementById('navLinks').classList.toggle('active'); }
         function toggleFaq(el) { el.classList.toggle('active'); }
-
-        async function autoPaste() {
-            try {
-                const text = await navigator.clipboard.readText();
-                if(text.includes('http')) document.getElementById('urlInput').value = text;
-            } catch (e) {}
-        }
-
-        async function startDownload() {
-            const url = document.getElementById('urlInput').value;
-            const loader = document.getElementById('loader');
-            const resultArea = document.getElementById('resultArea');
-            if(!url) return;
-            
-            loader.style.display = "block";
-            resultArea.style.display = "none";
-
-            try {
-                const res = await fetch(`/api/info?url=${encodeURIComponent(url)}`);
-                const data = await res.json();
-                loader.style.display = "none";
-                if(data.error) { alert(data.error); return; }
-                resultArea.style.display = "block";
-                document.getElementById('videoPlayer').src = data.formats[0].url;
-                let html = `<h4 style="margin:15px 0;">${data.title}</h4>`;
-                data.formats.forEach(f => {
-                    html += `<a href="${f.url}" target="_blank" style="display:block; background:var(--blue); color:white; text-decoration:none; padding:12px; border-radius:10px; margin-bottom:10px; font-weight:bold; text-align:center;">Download ${f.quality}</a>`;
-                });
-                document.getElementById('dlLinks').innerHTML = html;
-                resultArea.scrollIntoView({ behavior: 'smooth' });
-            } catch (e) { loader.style.display = "none"; alert("Error connecting to server."); }
-        }
     </script>
 </body>
 </html>
