@@ -3,179 +3,125 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YasinG - Facebook Video Downloader</title>
+    <title>YasinG - Social Video Downloader</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root { --blue: #2d6df6; --dark: #1a1d23; --light-bg: #f8f9fa; --text: #333; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; color: var(--text); background: white; line-height: 1.6; }
+        :root { --blue: #2d6df6; --dark: #1a1d23; --bg: #f8f9fa; --text: #333; }
+        body { font-family: 'Inter', sans-serif; margin: 0; color: var(--text); background: white; overflow-x: hidden; }
 
-        /* Navigation Menu */
-        .nav { display: flex; justify-content: space-between; align-items: center; padding: 15px 10%; border-bottom: 1px solid #eee; position: sticky; top: 0; background: white; z-index: 1000; }
+        /* 2. Top Navigation & Dropdown */
+        .nav { display: flex; justify-content: space-between; align-items: center; padding: 15px 8%; background: white; border-bottom: 1px solid #eee; position: sticky; top: 0; z-index: 2000; }
         .logo { font-size: 24px; font-weight: 800; color: var(--blue); text-decoration: none; }
-        .nav-links { display: flex; gap: 20px; }
+        
+        .nav-links { display: flex; gap: 25px; align-items: center; }
         .nav-links a { text-decoration: none; color: #555; font-size: 14px; font-weight: 500; }
+        .menu-toggle { display: none; font-size: 24px; cursor: pointer; color: var(--text); }
 
-        /* Hero / Download Section */
-        .hero { background: var(--dark); color: white; padding: 80px 20px; text-align: center; }
-        .hero h1 { font-size: 32px; margin-bottom: 10px; }
-        .hero p { color: #aaa; margin-bottom: 30px; }
+        /* Hero & Search */
+        .hero { background: var(--dark); color: white; padding: 60px 20px; text-align: center; }
+        .search-area { max-width: 600px; margin: 0 auto; display: flex; background: white; padding: 6px; border-radius: 50px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
+        .search-area input { flex: 1; border: none; padding: 12px 20px; outline: none; font-size: 16px; border-radius: 50px 0 0 50px; }
         
-        .search-container { max-width: 600px; margin: 0 auto; display: flex; background: white; padding: 5px; border-radius: 50px; overflow: hidden; }
-        .search-container input { flex: 1; border: none; padding: 15px 25px; outline: none; font-size: 16px; }
-        .btn-main { background: var(--blue); color: white; border: none; padding: 15px 40px; border-radius: 50px; font-weight: bold; cursor: pointer; transition: 0.3s; }
-        .btn-main:hover { background: #1a56d6; }
+        /* 4. Mobile Button to Icon Change */
+        .btn-dl { background: var(--blue); color: white; border: none; padding: 12px 30px; border-radius: 50px; font-weight: bold; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; }
+        .btn-dl span { display: inline; }
+        .btn-dl i { display: none; font-size: 18px; }
 
-        /* Features Section */
-        .section { padding: 80px 10%; text-align: center; }
-        .bg-light { background: var(--light-bg); }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; margin-top: 40px; }
-        
-        .feature-card { background: white; padding: 40px 20px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
-        .feature-card i { font-size: 40px; color: var(--blue); margin-bottom: 20px; }
-        .feature-card h3 { margin-bottom: 15px; }
-        .feature-card p { font-size: 14px; color: #777; }
+        /* Video Preview & Stylish Border */
+        #resultArea { display: none; max-width: 500px; margin: 30px auto; background: white; padding: 20px; border-radius: 20px; border: 2px solid var(--blue); box-shadow: 0 0 20px rgba(45, 109, 246, 0.2); }
+        video { width: 100%; border-radius: 12px; border: 1px solid #eee; }
 
-        /* Steps Section (Instructional) */
-        .step-box { display: flex; align-items: flex-start; gap: 20px; text-align: left; margin-bottom: 30px; background: white; padding: 25px; border-radius: 12px; border: 1px solid #eee; }
-        .step-num { background: var(--blue); color: white; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; flex-shrink: 0; }
+        /* 1. Download Another Button */
+        .reset-container { text-align: center; margin-top: 20px; display: none; }
+        .btn-another { background: transparent; border: 1px solid #ddd; padding: 10px 20px; border-radius: 50px; color: #666; cursor: pointer; font-size: 13px; }
 
-        /* FAQ Section */
-        .faq-item { text-align: left; max-width: 800px; margin: 0 auto 15px; background: white; border: 1px solid #eee; border-radius: 8px; overflow: hidden; }
-        .faq-question { padding: 20px; cursor: pointer; font-weight: bold; display: flex; justify-content: space-between; }
-        .faq-answer { padding: 0 20px 20px; color: #666; font-size: 14px; display: none; }
+        /* 3. Updates Section with Video Feel */
+        .section { padding: 60px 10%; }
+        .update-card { display: flex; gap: 20px; background: white; border: 1px solid #eee; border-radius: 15px; padding: 15px; margin-bottom: 20px; align-items: center; }
+        .update-video-thumb { width: 120px; height: 70px; background: #000; border-radius: 8px; position: relative; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .update-video-thumb i { color: white; font-size: 20px; opacity: 0.8; }
+        .update-info h4 { margin: 0 0 5px 0; color: var(--blue); font-size: 15px; }
+        .update-info p { margin: 0; font-size: 12px; color: #777; }
 
-        /* Footer */
-        .footer { background: #111; color: white; padding: 60px 10% 20px; text-align: left; }
-        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; }
-        .footer h4 { margin-bottom: 20px; color: var(--blue); }
-        .footer ul { list-style: none; padding: 0; }
-        .footer ul li { margin-bottom: 10px; }
-        .footer ul li a { color: #888; text-decoration: none; font-size: 14px; }
-        .copy { border-top: 1px solid #222; margin-top: 40px; padding-top: 20px; text-align: center; color: #555; font-size: 12px; }
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links { 
+                display: none; position: absolute; top: 60px; right: 0; width: 200px; 
+                background: white; flex-direction: column; padding: 20px; gap: 15px;
+                border-left: 1px solid #eee; border-bottom: 1px solid #eee; text-align: right;
+            }
+            .nav-links.active { display: flex; }
+            .menu-toggle { display: block; }
+            
+            /* 4. Mobile Icon Toggle */
+            .btn-dl { padding: 12px 20px; }
+            .btn-dl span { display: none; }
+            .btn-dl i { display: block; }
 
-        /* Result Area */
-        #resultArea { margin-top: 30px; display: none; background: white; padding: 20px; border-radius: 15px; color: var(--text); border: 2px solid var(--blue); }
-        video { width: 100%; border-radius: 10px; margin-bottom: 15px; }
+            .update-card { flex-direction: column; text-align: center; }
+            .update-video-thumb { width: 100%; height: 150px; }
+        }
     </style>
 </head>
 <body>
 
     <nav class="nav">
         <a href="/" class="logo">YasinG</a>
-        <div class="nav-links">
+        <div class="menu-toggle" onclick="toggleMenu()"><i class="fas fa-bars"></i></div>
+        <div class="nav-links" id="navLinks">
             <a href="#">Home</a>
-            <a href="#features">Features</a>
-            <a href="#how-to">How To</a>
+            <a href="#updates">Updates</a>
+            <a href="#how">How to Use</a>
             <a href="#faq">FAQ</a>
         </div>
     </nav>
 
     <div class="hero">
         <h1>Facebook Video Downloader</h1>
-        <p>Download Facebook Video Online for Free</p>
-        <div class="search-container">
-            <input type="text" id="urlInput" placeholder="Paste video URL here..." onfocus="autoPaste()">
-            <button class="btn-main" onclick="startDownload()">Download</button>
+        <p>Fast, Free, and High Quality</p>
+        <div class="search-area">
+            <input type="text" id="urlInput" placeholder="Paste link here..." onfocus="autoPaste()">
+            <button class="btn-dl" onclick="startDownload()">
+                <span>Download</span>
+                <i class="fas fa-download"></i>
+            </button>
         </div>
-        
-        <div id="loader" style="display:none; margin-top:20px;"><i class="fas fa-spinner fa-spin"></i> Processing...</div>
-        
-        <div id="resultArea" class="main-wrapper" style="max-width: 500px; margin: 30px auto;">
+
+        <div id="resultArea">
             <video id="videoPlayer" controls></video>
-            <div id="downloadLinks"></div>
-        </div>
-    </div>
-
-    <div class="section" id="features">
-        <h2>Our Features</h2>
-        <p>Effortless Facebook Video Downloads at Your Fingertips</p>
-        <div class="grid">
-            <div class="feature-card">
-                <i class="fas fa-bolt"></i>
-                <h3>High Quality</h3>
-                <p>Save videos in MP4, Full HD, and 2K formats with clear sound.</p>
-            </div>
-            <div class="feature-card">
-                <i class="fas fa-mobile-alt"></i>
-                <h3>Simple to Use</h3>
-                <p>Easily download Facebook videos on any device with a single click.</p>
-            </div>
-            <div class="feature-card">
-                <i class="fas fa-gift"></i>
-                <h3>Absolutely Free</h3>
-                <p>Our service is 100% free to use. We only show minimal ads for support.</p>
+            <div id="dlLinks"></div>
+            <div class="reset-container" id="resetBox">
+                <button class="btn-another" onclick="location.reload()">🔄 Download Another Video</button>
             </div>
         </div>
     </div>
 
-    <div class="section bg-light" id="how-to">
-        <h2>How To Use?</h2>
-        <p>Follow These Easy Steps to Keep Your Videos</p>
-        <div style="max-width: 700px; margin: 40px auto;">
-            <div class="step-box">
-                <div class="step-num">1</div>
-                <div>
-                    <h4>Copy the URL</h4>
-                    <p>Copy the video URL from Facebook by clicking 'Copy Link' in the share menu.</p>
-                </div>
+    <div class="section" id="updates">
+        <h2 style="text-align: center;">Recent Updates</h2>
+        <div class="update-card">
+            <div class="update-video-thumb"><i class="fas fa-play-circle"></i></div>
+            <div class="update-info">
+                <h4>Reels Download Fixed</h4>
+                <p>We've updated our servers to support 4K Facebook Reels. Try it now!</p>
             </div>
-            <div class="step-box">
-                <div class="step-num">2</div>
-                <div>
-                    <h4>Paste into Input</h4>
-                    <p>Paste the link into the box at the top of this page.</p>
-                </div>
-            </div>
-            <div class="step-box">
-                <div class="step-num">3</div>
-                <div>
-                    <h4>Hit Download</h4>
-                    <p>Choose your quality and save the video to your device.</p>
-                </div>
+        </div>
+        <div class="update-card">
+            <div class="update-video-thumb" style="background: #222;"><i class="fas fa-play-circle"></i></div>
+            <div class="update-info">
+                <h4>New Mobile Interface</h4>
+                <p>Our UI is now 2x faster on Android and iOS devices.</p>
             </div>
         </div>
     </div>
 
-    <div class="section" id="faq">
-        <h2>Got Questions?</h2>
-        <div class="faq-item">
-            <div class="faq-question" onclick="toggleFaq(this)">Is this downloader free? <i class="fas fa-chevron-down"></i></div>
-            <div class="faq-answer">Yes, our tool is completely free and requires no registration.</div>
-        </div>
-        <div class="faq-item">
-            <div class="faq-question" onclick="toggleFaq(this)">Which browsers are supported? <i class="fas fa-chevron-down"></i></div>
-            <div class="faq-answer">We support Chrome, Safari, Firefox, and all modern mobile browsers.</div>
-        </div>
-    </div>
-
-    <footer class="footer">
-        <div class="footer-grid">
-            <div>
-                <h4>YasinG</h4>
-                <p style="font-size:13px; color:#666;">The best online tool for downloading social media videos safely and quickly.</p>
-            </div>
-            <div>
-                <h4>Company</h4>
-                <ul>
-                    <li><a href="#">About Us</a></li>
-                    <li><a href="#">Contact Us</a></li>
-                </ul>
-            </div>
-            <div>
-                <h4>Support</h4>
-                <ul>
-                    <li><a href="#">Terms of Service</a></li>
-                    <li><a href="#">Privacy Policy</a></li>
-                </ul>
-            </div>
-        </div>
-        <div class="copy">Copyright © 2026 YasinG Downloader. All rights reserved.</div>
+    <footer style="text-align: center; padding: 40px; border-top: 1px solid #eee; font-size: 12px; color: #999;">
+        © 2026 YasinG Downloader. All rights reserved.
     </footer>
 
     <script>
-        function toggleFaq(el) {
-            const ans = el.nextElementSibling;
-            ans.style.display = ans.style.display === "block" ? "none" : "block";
+        // 2. Mobile Dropdown Toggle
+        function toggleMenu() {
+            document.getElementById('navLinks').classList.toggle('active');
         }
 
         async function autoPaste() {
@@ -187,29 +133,26 @@
 
         async function startDownload() {
             const url = document.getElementById('urlInput').value;
-            const loader = document.getElementById('loader');
-            const resultArea = document.getElementById('resultArea');
+            const resArea = document.getElementById('resultArea');
+            const resetBox = document.getElementById('resetBox');
             if(!url) return;
-
-            loader.style.display = "block";
-            resultArea.style.display = "none";
 
             try {
                 const res = await fetch(`/api/info?url=${encodeURIComponent(url)}`);
                 const data = await res.json();
-                loader.style.display = "none";
-
+                
                 if(data.error) { alert(data.error); return; }
 
-                resultArea.style.display = "block";
+                resArea.style.display = "block";
+                resetBox.style.display = "block"; // 1. Show Reset Button
                 document.getElementById('videoPlayer').src = data.formats[0].url;
                 
-                let html = `<h3>${data.title}</h3>`;
+                let html = `<h4 style="margin:15px 0;">${data.title}</h4>`;
                 data.formats.forEach(f => {
-                    html += `<a href="${f.url}" target="_blank" class="btn-main" style="display:block; text-align:center; margin-top:10px; text-decoration:none;">Download ${f.quality}</a>`;
+                    html += `<a href="${f.url}" target="_blank" style="display:block; background:var(--blue); color:white; text-decoration:none; padding:12px; border-radius:10px; margin-bottom:10px; font-weight:bold; text-align:center;">Download ${f.quality}</a>`;
                 });
-                document.getElementById('downloadLinks').innerHTML = html;
-            } catch (e) { loader.style.display = "none"; alert("Error connecting to server."); }
+                document.getElementById('dlLinks').innerHTML = html;
+            } catch (e) { alert("Server connection error."); }
         }
     </script>
 </body>
