@@ -9,132 +9,95 @@
         :root { --blue: #2d6df6; --bg: #0b0d11; --card: #16191f; --text-dim: #888; }
         body { font-family: 'Inter', sans-serif; background: var(--bg); color: white; margin: 0; }
 
-        /* --- Navigation & Improved Dropdown --- */
-        .nav { display: flex; justify-content: space-between; padding: 15px 20px; border-bottom: 1px solid #222; position: sticky; top:0; background: var(--bg); z-index:1000; align-items: center; }
-        .logo { color: var(--blue); font-weight: 900; font-size: 24px; text-decoration:none; display: flex; align-items: center; gap: 5px; }
+        /* Navigation Fix for Desktop/Mobile */
+        .nav { display: flex; justify-content: space-between; padding: 15px 5%; border-bottom: 1px solid #222; position: sticky; top:0; background: var(--bg); z-index:1000; align-items: center; }
+        .logo { color: var(--blue); font-weight: 900; font-size: 24px; text-decoration:none; display: flex; align-items: center; gap: 8px; }
+        .menu-btn { font-size: 22px; cursor: pointer; color: white; background: none; border: none; }
         
-        .menu-btn { font-size: 22px; cursor: pointer; color: white; background: none; border: none; outline: none; }
-        
-        .nav-menu { 
-            display: none; 
-            flex-direction: column; 
-            position: absolute; 
-            top: 60px; left: 0; width: 100%; 
-            background: var(--card); 
-            border-bottom: 1px solid #333; 
-            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
-        }
+        .nav-menu { display: none; flex-direction: column; position: absolute; top: 60px; right: 5%; width: 200px; background: var(--card); border: 1px solid #333; border-radius: 12px; z-index: 2000; overflow: hidden; }
         .nav-menu.active { display: flex; }
-        .nav-menu a { color: white; padding: 15px 25px; text-decoration: none; font-size: 14px; border-bottom: 1px solid #222; transition: 0.3s; }
-        .nav-menu a:hover { background: #1e222a; color: var(--blue); }
+        .nav-menu a { color: white; padding: 12px 20px; text-decoration: none; font-size: 14px; border-bottom: 1px solid #222; }
 
-        .container { max-width: 500px; margin: 20px auto; padding: 0 15px; }
-        
-        /* Main Download Card */
-        .main-card { background: var(--card); border-radius: 24px; padding: 30px; border: 1px solid #222; text-align: center; }
-        .input-box { background: #1e222a; border-radius: 14px; display: flex; padding: 5px; margin: 25px 0; border: 1px solid #333; }
+        /* Main Wrapper (Fixes the Desktop 'Stretch' Issue) */
+        .main-wrapper { max-width: 600px; margin: 0 auto; padding: 20px; }
+
+        .main-card { background: var(--card); border-radius: 28px; padding: 30px; border: 1px solid #222; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .input-box { background: #1e222a; border-radius: 16px; display: flex; padding: 6px; margin: 25px 0; border: 1px solid #333; }
         input { flex: 1; background: transparent; border: none; color: white; padding: 12px; outline: none; font-size: 14px; }
-        .btn-search { background: var(--blue); border: none; color: white; padding: 10px 20px; border-radius: 10px; font-weight: bold; cursor: pointer; }
+        .btn-search { background: var(--blue); border: none; color: white; padding: 10px 22px; border-radius: 12px; font-weight: bold; cursor: pointer; }
 
-        /* Video Styles */
-        .preview-box { width: 100%; border-radius: 20px; overflow: hidden; margin-top: 20px; display: none; border: 1px solid #333; }
-        video { width: 100%; background: #000; display: block; }
-        .info-badge { background: rgba(45, 109, 246, 0.1); border: 1px solid var(--blue); color: var(--blue); padding: 5px 12px; border-radius: 20px; font-size: 11px; display: inline-block; margin: 10px 0; font-weight: bold; }
+        /* Stylish Video & Border */
+        .preview-box { width: 100%; border-radius: 20px; overflow: hidden; margin-top: 25px; display: none; border: 2px solid var(--blue); box-shadow: 0 0 15px rgba(45, 109, 246, 0.3); position: relative; }
+        video { width: 100%; display: block; background: #000; }
+        .info-badge { background: rgba(45, 109, 246, 0.15); border: 1px solid var(--blue); color: var(--blue); padding: 6px 14px; border-radius: 20px; font-size: 11px; display: inline-block; margin-top: 15px; font-weight: bold; }
 
-        /* --- Steps Section (Stacking Fix) --- */
-        .section-title { text-align: center; margin: 50px 0 25px; font-size: 22px; }
-        
-        /* Transitioning from Grid to Stacked Cards */
-        .steps-container { display: flex; flex-direction: column; gap: 20px; margin-bottom: 50px; }
+        /* Stylish Steps (Updated per request) */
+        .section-title { margin: 50px 0 25px; font-size: 22px; font-weight: 800; text-align: center; }
+        .steps-container { display: flex; flex-direction: column; gap: 15px; }
         .step-card { 
-            background: var(--card); 
-            padding: 30px 20px; 
-            border-radius: 24px; 
-            text-align: center; 
-            border: 1px solid #222; 
-            transition: 0.3s;
+            background: linear-gradient(145deg, #1a1d24, #14171c); 
+            padding: 25px; border-radius: 24px; text-align: center; 
+            border: 1px solid #222; transition: 0.4s; position: relative;
         }
-        .step-card:hover { border-color: var(--blue); transform: translateY(-3px); }
-        .step-card i { color: var(--blue); font-size: 30px; margin-bottom: 20px; display: block; }
-        .step-card h4 { font-size: 16px; margin: 10px 0; font-weight: 800; }
-        .step-card p { font-size: 12px; color: var(--text-dim); line-height: 1.6; padding: 0 15px; }
+        .step-card:hover { border-color: var(--blue); transform: scale(1.02); }
+        .step-card i { color: var(--blue); font-size: 28px; margin-bottom: 15px; filter: drop-shadow(0 0 5px var(--blue)); }
+        .step-card h4 { font-size: 15px; margin: 5px 0; }
+        .step-card p { font-size: 11.5px; color: var(--text-dim); line-height: 1.6; }
 
-        /* FAQs & Updates */
-        .faq-card { background: var(--card); padding: 20px; border-radius: 20px; border: 1px solid #222; margin-bottom: 15px; }
-        .faq-card h4 { font-size: 14px; margin: 0 0 10px; color: var(--blue); }
-        .faq-card p { font-size: 12px; color: var(--text-dim); line-height: 1.5; margin: 0; }
+        /* Updates Section (Restored) */
+        .updates-container { margin-top: 40px; }
+        .update-box { background: rgba(45, 109, 246, 0.05); border-left: 4px solid var(--blue); padding: 15px; border-radius: 12px; margin-bottom: 12px; display: flex; gap: 15px; align-items: center; }
+        .update-box i { font-size: 18px; color: var(--blue); }
+        .update-box p { font-size: 12px; margin: 0; color: #ccc; }
 
-        /* Footer */
-        .footer { padding: 50px 20px; border-top: 1px solid #222; text-align: center; margin-top: 50px; }
-        .social-icons { display: flex; justify-content: center; gap: 25px; margin-bottom: 25px; }
+        .dl-btn { display: block; background: #22262e; color: white; text-decoration: none; padding: 16px; border-radius: 14px; margin-top: 10px; border: 1px solid #333; font-weight: 700; font-size: 14px; }
+        .dl-btn:hover { background: var(--blue); }
+
+        .footer { padding: 40px 20px; border-top: 1px solid #222; text-align: center; margin-top: 60px; }
+        .social-icons { display: flex; justify-content: center; gap: 30px; margin-bottom: 20px; }
         .social-icons a { color: var(--text-dim); font-size: 22px; }
 
-        .loader { display: none; margin: 20px auto; border: 3px solid #222; border-top: 3px solid var(--blue); border-radius: 50%; width: 25px; height: 25px; animation: spin 1s linear infinite; }
+        .loader { display: none; margin: 20px auto; border: 3px solid #222; border-top: 3px solid var(--blue); border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
 
     <nav class="nav">
-        <a href="/" class="logo">
-            <i class="fab fa-facebook" style="font-size: 24px;"></i> YasinG
-        </a>
-        <button class="menu-btn" onclick="toggleMenu()">
-            <i class="fas fa-bars"></i>
-        </button>
+        <a href="/" class="logo"><i class="fab fa-facebook"></i> YasinG</a>
+        <button class="menu-btn" onclick="toggleMenu()"><i class="fas fa-bars"></i></button>
         <div class="nav-menu" id="navMenu">
             <a href="#">እንዴት እንደሚሰራ</a>
             <a href="#">ዜናዎች</a>
             <a href="#">ጥያቄዎች</a>
-            <a href="#">አግኙን</a>
         </div>
     </nav>
 
-    <div class="container">
+    <div class="main-wrapper">
         <div class="main-card">
-            <h2 style="font-size: 26px; margin: 0;">ቪዲዮ ማውረጃ</h2>
+            <h2 style="font-size: 24px; margin-top: 0;">ቪዲዮ ማውረጃ</h2>
             <div class="input-box">
                 <input type="text" id="urlInput" placeholder="ሊንኩን እዚህ ያስገቡ..." onfocus="autoPaste()">
                 <button class="btn-search" onclick="startDownload()">አውርድ</button>
             </div>
 
             <div id="loader" class="loader"></div>
-
-            <div id="previewBox" class="preview-box">
-                <video id="videoPlayer" controls></video>
-            </div>
-
+            <div id="previewBox" class="preview-box"><video id="videoPlayer" controls></video></div>
             <div id="results"></div>
             <button id="resetBtn" style="display:none; background:none; border:none; color:var(--text-dim); cursor:pointer; margin-top:15px;" onclick="location.reload()">🔄 ሌላ ቪዲዮ አውርድ</button>
         </div>
 
         <h3 class="section-title">እንዴት ማውረድ ይቻላል?</h3>
         <div class="steps-container">
-            <div class="step-card">
-                <i class="fas fa-link"></i>
-                <h4>1. ሊንክ ቅዱ</h4>
-                <p>የቪዲዮውን ሊንክ ከፌስቡክ ወይም ቲክቶክ ኮፒ ያድርጉ።</p>
-            </div>
-            <div class="step-card">
-                <i class="fas fa-paste"></i>
-                <h4>2. እዚህ ይለጥፉ</h4>
-                <p>ሊንኩን ከላይ ባለው ሳጥን ውስጥ 'ለጥፍ' በማለት ያስገቡ።</p>
-            </div>
-            <div class="step-card">
-                <i class="fas fa-download"></i>
-                <h4>3. ያውርዱ</h4>
-                <p>የሚፈልጉትን ጥራት መርጠው ቪዲዮውን ያውርዱ።</p>
-            </div>
+            <div class="step-card"><i class="fas fa-link"></i><h4>1. ሊንክ ቅዱ</h4><p>የቪዲዮውን ሊንክ ከፌስቡክ ወይም ቲክቶክ ኮፒ ያድርጉ።</p></div>
+            <div class="step-card"><i class="fas fa-paste"></i><h4>2. እዚህ ይለጥፉ</h4><p>ሊንኩን ከላይ ባለው ሳጥን ውስጥ 'ለጥፍ' በማለት ያስገቡ።</p></div>
+            <div class="step-card"><i class="fas fa-download"></i><h4>3. ያውርዱ</h4><p>ጥራት መርጠው ቪዲዮውን ወደ ስልክዎ ያውርዱ።</p></div>
         </div>
 
-        <h3 class="section-title" style="color:var(--blue); text-align:left;">ተደጋጋሚ ጥያቄዎች</h3>
-        <div class="faq-card">
-            <h4>ቪዲዮ ለማውረድ መክፈል ያስፈልጋል?</h4>
-            <p>አይ! Yasing ሙሉ በሙሉ ነፃ አገልግሎት ነው። ምንም አይነት ክፍያ ወይም አካውንት መክፈት አይጠበቅብዎትም።</p>
-        </div>
-        <div class="faq-card">
-            <h4>ቪዲዮው የት ነው የሚቀመጠው?</h4>
-            <p>በስልክዎ ወይም በኮምፒውተርዎ 'Downloads' ፎልደር ውስጥ በቀጥታ ይቀመጣል።</p>
+        <div class="updates-container">
+            <h3 class="section-title" style="text-align:left; color:var(--blue);">ዜናዎች</h3>
+            <div class="update-box"><i class="fas fa-bolt"></i><p>V2.5 Update: ቪዲዮዎችን በከፍተኛ ፍጥነት የማውረድ አዲስ ሰርቨሮች ተጨምረዋል።</p></div>
+            <div class="update-box"><i class="fas fa-sync"></i><p>Facebook Update: ሪልስ (Reels) ቪዲዮዎችን ማውረድ አሁን ይቻላል።</p></div>
         </div>
     </div>
 
@@ -148,59 +111,30 @@
     </footer>
 
     <script>
-        function toggleMenu() {
-            const menu = document.getElementById('navMenu');
-            menu.classList.toggle('active');
-        }
-
-        async function autoPaste() {
-            try {
-                const text = await navigator.clipboard.readText();
-                if(text.includes('http')) document.getElementById('urlInput').value = text;
-            } catch (e) {}
-        }
-
+        function toggleMenu() { document.getElementById('navMenu').classList.toggle('active'); }
+        async function autoPaste() { try { const t = await navigator.clipboard.readText(); if(t.includes('http')) document.getElementById('urlInput').value = t; } catch(e){} }
+        
         async function startDownload() {
             const url = document.getElementById('urlInput').value;
-            const results = document.getElementById('results');
+            const resDiv = document.getElementById('results');
             const loader = document.getElementById('loader');
             const preview = document.getElementById('previewBox');
-            const player = document.getElementById('videoPlayer');
-
             if(!url) return;
-            loader.style.display = "block";
-            results.innerHTML = "";
-            preview.style.display = "none";
-
+            loader.style.display="block"; resDiv.innerHTML=""; preview.style.display="none";
             try {
                 const res = await fetch(`/api/info?url=${encodeURIComponent(url)}`);
                 const data = await res.json();
-                loader.style.display = "none";
-
-                if(data.error) {
-                    results.innerHTML = `<p style="color:red; font-size:12px;">${data.error}</p>`;
-                    return;
-                }
-
-                preview.style.display = "block";
-                player.src = data.formats[0].url;
-                player.poster = data.thumbnail;
-
-                let html = `
-                    <div class="info-badge"><i class="fas fa-user"></i> Video by: ${data.uploader}</div>
-                    <p style="margin:10px 0; font-size:12px; color:#aaa;">${data.title}</p>
-                `;
-                
+                loader.style.display="none";
+                if(data.error) { resDiv.innerHTML=`<p style="color:red;font-size:12px">${data.error}</p>`; return; }
+                preview.style.display="block";
+                document.getElementById('videoPlayer').src = data.formats[0].url;
+                let html = `<div class="info-badge">Video by: ${data.uploader}</div><p style="font-size:12px;color:#aaa;margin:10px 0;">${data.title}</p>`;
                 data.formats.forEach(f => {
-                    html += `<a href="${f.url}" target="_blank" style="display:block; background:#22262e; color:white; text-decoration:none; padding:15px; border-radius:12px; margin-top:10px; border:1px solid #333; font-weight:600;">🎬 ${f.quality} አውርድ</a>`;
+                    html += `<a href="${f.url}" target="_blank" class="dl-btn">🎬 ${f.quality} አውርድ</a>`;
                 });
-
-                results.innerHTML = html;
-                document.getElementById('resetBtn').style.display = "inline-block";
-            } catch (err) {
-                loader.style.display = "none";
-                results.innerHTML = "Server connection error.";
-            }
+                resDiv.innerHTML = html;
+                document.getElementById('resetBtn').style.display="inline-block";
+            } catch(e) { loader.style.display="none"; resDiv.innerHTML="Server Error"; }
         }
     </script>
 </body>
