@@ -27,4 +27,19 @@ def get_info():
             
             # We create a clean list of video links
             formats_list = []
-            # Just get the top 2
+            # Just get the top 2-3 best quality links with video+audio
+            for f in info.get('formats', []):
+                if f.get('url') and f.get('vcodec') != 'none' and f.get('acodec') != 'none':
+                    formats_list.append({
+                        'quality': f.get('format_note') or f.get('resolution') or 'HD',
+                        'url': f.get('url'),
+                        'ext': f.get('ext')
+                    })
+
+            return jsonify({
+                "title": info.get('title'),
+                "thumbnail": info.get('thumbnail'),
+                "formats": formats_list[:3] # Send top 3
+            })
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
