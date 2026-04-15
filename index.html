@@ -3,139 +3,166 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YasinG Downloader</title>
+    <title>YasinG - High Speed Downloader</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root { --blue: #2d6df6; --bg: #0b0d11; --card: #16191f; --text-dim: #888; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); color: white; margin: 0; }
+        :root { --blue: #2d6df6; --dark: #1a1d23; --bg: #f8f9fa; --text: #333; }
+        body { font-family: 'Inter', sans-serif; margin: 0; color: var(--text); background: white; scroll-behavior: smooth; }
 
-        /* Navigation Fix for Desktop/Mobile */
-        .nav { display: flex; justify-content: space-between; padding: 15px 5%; border-bottom: 1px solid #222; position: sticky; top:0; background: var(--bg); z-index:1000; align-items: center; }
-        .logo { color: var(--blue); font-weight: 900; font-size: 24px; text-decoration:none; display: flex; align-items: center; gap: 8px; }
-        .menu-btn { font-size: 22px; cursor: pointer; color: white; background: none; border: none; }
-        
-        .nav-menu { display: none; flex-direction: column; position: absolute; top: 60px; right: 5%; width: 200px; background: var(--card); border: 1px solid #333; border-radius: 12px; z-index: 2000; overflow: hidden; }
-        .nav-menu.active { display: flex; }
-        .nav-menu a { color: white; padding: 12px 20px; text-decoration: none; font-size: 14px; border-bottom: 1px solid #222; }
-
-        /* Main Wrapper (Fixes the Desktop 'Stretch' Issue) */
-        .main-wrapper { max-width: 600px; margin: 0 auto; padding: 20px; }
-
-        .main-card { background: var(--card); border-radius: 28px; padding: 30px; border: 1px solid #222; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        .input-box { background: #1e222a; border-radius: 16px; display: flex; padding: 6px; margin: 25px 0; border: 1px solid #333; }
-        input { flex: 1; background: transparent; border: none; color: white; padding: 12px; outline: none; font-size: 14px; }
-        .btn-search { background: var(--blue); border: none; color: white; padding: 10px 22px; border-radius: 12px; font-weight: bold; cursor: pointer; }
-
-        /* Stylish Video & Border */
-        .preview-box { width: 100%; border-radius: 20px; overflow: hidden; margin-top: 25px; display: none; border: 2px solid var(--blue); box-shadow: 0 0 15px rgba(45, 109, 246, 0.3); position: relative; }
-        video { width: 100%; display: block; background: #000; }
-        .info-badge { background: rgba(45, 109, 246, 0.15); border: 1px solid var(--blue); color: var(--blue); padding: 6px 14px; border-radius: 20px; font-size: 11px; display: inline-block; margin-top: 15px; font-weight: bold; }
-
-        /* Stylish Steps (Updated per request) */
-        .section-title { margin: 50px 0 25px; font-size: 22px; font-weight: 800; text-align: center; }
-        .steps-container { display: flex; flex-direction: column; gap: 15px; }
-        .step-card { 
-            background: linear-gradient(145deg, #1a1d24, #14171c); 
-            padding: 25px; border-radius: 24px; text-align: center; 
-            border: 1px solid #222; transition: 0.4s; position: relative;
+        /* --- 1. NAVIGATION --- */
+        .nav { 
+            display: flex; justify-content: space-between; align-items: center; 
+            padding: 15px 8%; background: white; border-bottom: 1px solid #eee; 
+            position: sticky; top: 0; z-index: 2000;
         }
-        .step-card:hover { border-color: var(--blue); transform: scale(1.02); }
-        .step-card i { color: var(--blue); font-size: 28px; margin-bottom: 15px; filter: drop-shadow(0 0 5px var(--blue)); }
-        .step-card h4 { font-size: 15px; margin: 5px 0; }
-        .step-card p { font-size: 11.5px; color: var(--text-dim); line-height: 1.6; }
+        .logo { font-size: 26px; font-weight: 900; color: var(--blue); text-decoration: none; }
+        .nav-links { display: flex; gap: 25px; margin-left: auto; }
+        .nav-links a { text-decoration: none; color: #444; font-size: 14px; font-weight: 600; }
 
-        /* Updates Section (Restored) */
-        .updates-container { margin-top: 40px; }
-        .update-box { background: rgba(45, 109, 246, 0.05); border-left: 4px solid var(--blue); padding: 15px; border-radius: 12px; margin-bottom: 12px; display: flex; gap: 15px; align-items: center; }
-        .update-box i { font-size: 18px; color: var(--blue); }
-        .update-box p { font-size: 12px; margin: 0; color: #ccc; }
+        /* --- 2. HERO SECTION (SPLIT) --- */
+        .hero { 
+            background: var(--dark); color: white; padding: 60px 8%; 
+            display: flex; align-items: center; gap: 40px; min-height: 400px;
+        }
+        .hero-content { flex: 1.2; }
+        .hero-content h1 { font-size: 38px; margin-bottom: 15px; font-weight: 800; }
+        .hero-image { flex: 0.8; text-align: center; }
+        .hero-image img { max-width: 100%; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
 
-        .dl-btn { display: block; background: #22262e; color: white; text-decoration: none; padding: 16px; border-radius: 14px; margin-top: 10px; border: 1px solid #333; font-weight: 700; font-size: 14px; }
-        .dl-btn:hover { background: var(--blue); }
+        .search-area { 
+            max-width: 450px; display: flex; background: white; 
+            padding: 5px; border-radius: 50px; align-items: center; margin-top: 25px;
+        }
+        .search-area input { flex: 1; border: none; padding: 12px 18px; outline: none; border-radius: 50px; color: #333; }
+        .btn-dl { background: var(--blue); color: white; border: none; width: 45px; height: 45px; border-radius: 50%; cursor: pointer; margin-right: 2px; }
 
-        .footer { padding: 40px 20px; border-top: 1px solid #222; text-align: center; margin-top: 60px; }
-        .social-icons { display: flex; justify-content: center; gap: 30px; margin-bottom: 20px; }
-        .social-icons a { color: var(--text-dim); font-size: 22px; }
+        /* --- 3. STEPS GRID (Horizontal) --- */
+        .section-title { text-align: center; margin: 60px 0 30px; font-size: 26px; font-weight: 800; }
+        .steps-grid { 
+            display: grid; grid-template-columns: repeat(3, 1fr); 
+            gap: 20px; padding: 0 8% 60px; 
+        }
+        .step-card { background: #fafafa; padding: 25px; border-radius: 15px; border: 1px solid #eee; text-align: center; }
+        .step-card i { font-size: 30px; color: var(--blue); margin-bottom: 15px; }
+        .step-card h4 { margin: 10px 0; }
 
-        .loader { display: none; margin: 20px auto; border: 3px solid #222; border-top: 3px solid var(--blue); border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        /* --- 4. SIDE-BY-SIDE GRID (Updates & FAQ) --- */
+        .main-grid { 
+            display: grid; grid-template-columns: 1.2fr 1fr; 
+            gap: 40px; padding: 60px 8%; background: #fcfcfc; border-top: 1px solid #f0f0f0;
+        }
+        
+        /* News Style */
+        .news-card { background: white; border: 1px solid #eee; border-radius: 12px; display: flex; gap: 15px; padding: 12px; margin-bottom: 15px; align-items: center; }
+        .news-img { width: 80px; height: 80px; border-radius: 8px; background: #eee; object-fit: cover; }
+        .news-text h4 { margin: 0 0 5px; font-size: 16px; color: var(--blue); }
+        .news-text p { margin: 0; font-size: 13px; color: #666; }
+
+        /* FAQ Style */
+        .faq-item { background: white; border: 1px solid #eee; border-radius: 10px; margin-bottom: 10px; padding: 15px; cursor: pointer; }
+        .faq-item h4 { margin: 0; display: flex; justify-content: space-between; font-size: 15px; }
+        .faq-answer { max-height: 0; overflow: hidden; transition: 0.3s ease; color: #777; font-size: 13px; line-height: 1.5; }
+        .faq-item.active .faq-answer { max-height: 100px; margin-top: 10px; }
+
+        /* --- 5. FOOTER WITH FOLLOWERS --- */
+        .footer { background: #0b0d11; color: white; padding: 50px 8% 20px; }
+        .footer-flex { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 30px; }
+        .social-follow { display: flex; gap: 15px; margin-top: 15px; }
+        .follow-btn { text-decoration: none; color: white; display: flex; align-items: center; gap: 10px; background: #1a1d23; padding: 10px; border-radius: 8px; border: 1px solid #333; font-size: 13px; }
+        .follow-btn i { color: var(--blue); font-size: 18px; }
+        .stats { font-size: 11px; color: #888; display: block; }
+
+        /* RESPONSIVE */
+        @media (max-width: 900px) {
+            .hero, .main-grid, .steps-grid { grid-template-columns: 1fr; flex-direction: column; }
+            .hero-image { display: none; }
+            .nav-links { display: none; }
+        }
     </style>
 </head>
 <body>
 
     <nav class="nav">
-        <a href="/" class="logo"><i class="fab fa-facebook"></i> YasinG</a>
-        <button class="menu-btn" onclick="toggleMenu()"><i class="fas fa-bars"></i></button>
-        <div class="nav-menu" id="navMenu">
-            <a href="#">እንዴት እንደሚሰራ</a>
-            <a href="#">ዜናዎች</a>
-            <a href="#">ጥያቄዎች</a>
+        <a href="/" class="logo">YasinG</a>
+        <div class="nav-links">
+            <a href="#how">እንዴት እንደሚሰራ</a>
+            <a href="#updates">ዜናዎች</a>
+            <a href="#faq">ጥያቄዎች</a>
         </div>
     </nav>
 
-    <div class="main-wrapper">
-        <div class="main-card">
-            <h2 style="font-size: 24px; margin-top: 0;">ቪዲዮ ማውረጃ</h2>
-            <div class="input-box">
-                <input type="text" id="urlInput" placeholder="ሊንኩን እዚህ ያስገቡ..." onfocus="autoPaste()">
-                <button class="btn-search" onclick="startDownload()">አውርድ</button>
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Download Facebook <br><span style="color:var(--blue)">Videos in Seconds</span></h1>
+            <p style="opacity:0.8">ጥራት ያላቸው ቪዲዮዎችን በቀላሉ ለማውረድ የሚያግዝ ምርጥ ድህረ-ገጽ።</p>
+            <div class="search-area">
+                <input type="text" id="urlInput" placeholder="ቪዲዮ ሊንክ እዚህ ያስገቡ...">
+                <button class="btn-dl"><i class="fas fa-download"></i></button>
             </div>
+        </div>
+        <div class="hero-image">
+            <img src="https://via.placeholder.com/400x250/2d6df6/ffffff?text=Video+Interface" alt="Preview">
+        </div>
+    </section>
 
-            <div id="loader" class="loader"></div>
-            <div id="previewBox" class="preview-box"><video id="videoPlayer" controls></video></div>
-            <div id="results"></div>
-            <button id="resetBtn" style="display:none; background:none; border:none; color:var(--text-dim); cursor:pointer; margin-top:15px;" onclick="location.reload()">🔄 ሌላ ቪዲዮ አውርድ</button>
+    <h2 class="section-title" id="how">እንዴት ማውረድ ይቻላል?</h2>
+    <div class="steps-grid">
+        <div class="step-card"><i class="fas fa-link"></i><h4>1. ኮፒ</h4><p>ቪዲዮ ሊንኩን ይያዙ</p></div>
+        <div class="step-card"><i class="fas fa-paste"></i><h4>2. ፔስት</h4><p>እዚህ ጋር ይለጥፉ</p></div>
+        <div class="step-card"><i class="fas fa-download"></i><h4>3. ዳውንሎድ</h4><p>ጥራቱን መርጠው ያውርዱ</p></div>
+    </div>
+
+    <div class="main-grid">
+        <div id="updates">
+            <h3 style="margin-top:0">የቅርብ ጊዜ ዜናዎች</h3>
+            <div class="news-card">
+                <img src="https://via.placeholder.com/80" class="news-img">
+                <div class="news-text">
+                    <h4>Reels Support Live</h4>
+                    <p>አሁን ሪልስ ቪዲዮዎችን ማውረድ ይቻላል።</p>
+                </div>
+            </div>
+            <div class="news-card">
+                <img src="https://via.placeholder.com/80" class="news-img">
+                <div class="news-text">
+                    <h4>Ultra-Fast Servers</h4>
+                    <p>አዳዲስ ሰርቨሮች ስራ ጀምረዋል።</p>
+                </div>
+            </div>
         </div>
 
-        <h3 class="section-title">እንዴት ማውረድ ይቻላል?</h3>
-        <div class="steps-container">
-            <div class="step-card"><i class="fas fa-link"></i><h4>1. ሊንክ ቅዱ</h4><p>የቪዲዮውን ሊንክ ከፌስቡክ ወይም ቲክቶክ ኮፒ ያድርጉ።</p></div>
-            <div class="step-card"><i class="fas fa-paste"></i><h4>2. እዚህ ይለጥፉ</h4><p>ሊንኩን ከላይ ባለው ሳጥን ውስጥ 'ለጥፍ' በማለት ያስገቡ።</p></div>
-            <div class="step-card"><i class="fas fa-download"></i><h4>3. ያውርዱ</h4><p>ጥራት መርጠው ቪዲዮውን ወደ ስልክዎ ያውርዱ።</p></div>
-        </div>
-
-        <div class="updates-container">
-            <h3 class="section-title" style="text-align:left; color:var(--blue);">ዜናዎች</h3>
-            <div class="update-box"><i class="fas fa-bolt"></i><p>V2.5 Update: ቪዲዮዎችን በከፍተኛ ፍጥነት የማውረድ አዲስ ሰርቨሮች ተጨምረዋል።</p></div>
-            <div class="update-box"><i class="fas fa-sync"></i><p>Facebook Update: ሪልስ (Reels) ቪዲዮዎችን ማውረድ አሁን ይቻላል።</p></div>
+        <div id="faq">
+            <h3 style="margin-top:0">ጥያቄዎች</h3>
+            <div class="faq-item" onclick="this.classList.toggle('active')">
+                <h4>አገልግሎቱ ነፃ ነው? <i class="fas fa-plus"></i></h4>
+                <div class="faq-answer">አዎ! ምንም አይነት ክፍያ አይጠበቅብዎትም።</div>
+            </div>
+            <div class="faq-item" onclick="this.classList.toggle('active')">
+                <h4>የት ነው የሚቀመጠው? <i class="fas fa-plus"></i></h4>
+                <div class="faq-answer">በስልክዎ የዳውንሎድ ፎልደር ውስጥ ይገኛል።</div>
+            </div>
         </div>
     </div>
 
     <footer class="footer">
-        <div class="social-icons">
-            <a href="#"><i class="fab fa-telegram"></i></a>
-            <a href="#"><i class="fab fa-facebook"></i></a>
-            <a href="#"><i class="fab fa-instagram"></i></a>
+        <div class="footer-flex">
+            <div>
+                <h3 style="color:var(--blue); margin:0;">YasinG</h3>
+                <p style="color:#555; font-size:12px; margin-top:5px;">Social Media Downloader</p>
+            </div>
+            <div>
+                <h4 style="margin:0">Follow Us</h4>
+                <div class="social-follow">
+                    <a href="#" class="follow-btn"><i class="fab fa-telegram"></i><div>Telegram<span class="stats">12K Fans</span></div></a>
+                    <a href="#" class="follow-btn"><i class="fab fa-facebook"></i><div>Facebook<span class="stats">25K Fans</span></div></a>
+                </div>
+            </div>
         </div>
-        <div style="font-size: 11px; color: #555;">© 2026 YASING.COM.ET | ETHIOPIA</div>
+        <p style="text-align:center; font-size:10px; color:#333; margin-top:30px; border-top:1px solid #1a1d23; padding-top:15px;">© 2026 YasinG Downloader.</p>
     </footer>
 
     <script>
-        function toggleMenu() { document.getElementById('navMenu').classList.toggle('active'); }
-        async function autoPaste() { try { const t = await navigator.clipboard.readText(); if(t.includes('http')) document.getElementById('urlInput').value = t; } catch(e){} }
-        
-        async function startDownload() {
-            const url = document.getElementById('urlInput').value;
-            const resDiv = document.getElementById('results');
-            const loader = document.getElementById('loader');
-            const preview = document.getElementById('previewBox');
-            if(!url) return;
-            loader.style.display="block"; resDiv.innerHTML=""; preview.style.display="none";
-            try {
-                const res = await fetch(`/api/info?url=${encodeURIComponent(url)}`);
-                const data = await res.json();
-                loader.style.display="none";
-                if(data.error) { resDiv.innerHTML=`<p style="color:red;font-size:12px">${data.error}</p>`; return; }
-                preview.style.display="block";
-                document.getElementById('videoPlayer').src = data.formats[0].url;
-                let html = `<div class="info-badge">Video by: ${data.uploader}</div><p style="font-size:12px;color:#aaa;margin:10px 0;">${data.title}</p>`;
-                data.formats.forEach(f => {
-                    html += `<a href="${f.url}" target="_blank" class="dl-btn">🎬 ${f.quality} አውርድ</a>`;
-                });
-                resDiv.innerHTML = html;
-                document.getElementById('resetBtn').style.display="inline-block";
-            } catch(e) { loader.style.display="none"; resDiv.innerHTML="Server Error"; }
-        }
+        // No extra JS needed for layout
     </script>
 </body>
 </html>
