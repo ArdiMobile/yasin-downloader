@@ -9,16 +9,16 @@
         :root { --blue: #2d6df6; --dark: #1a1d23; --bg: #f8f9fa; --text: #333; --glass: rgba(255, 255, 255, 0.95); }
         body { font-family: 'Inter', sans-serif; margin: 0; color: var(--text); background: white; scroll-behavior: smooth; }
 
-        /* --- 1. STYLISH TOP NAVIGATION (Right Aligned Links) --- */
+        /* --- 1. STYLISH TOP NAVIGATION --- */
         .nav { 
             display: flex; justify-content: space-between; align-items: center; 
-            padding: 15px 8%; background: var(--glass); 
+            padding: 15px 8%; background: white; 
             border-bottom: 1px solid rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 2000;
-            backdrop-filter: blur(10px); width: 100%; box-sizing: border-box;
+            width: 100%; box-sizing: border-box;
         }
         .logo { font-size: 26px; font-weight: 900; color: var(--blue); text-decoration: none; letter-spacing: -1px; }
         
-        /* Pushes links to the right */
+        /* Aligning text to the right only */
         .nav-links { display: flex; gap: 30px; align-items: center; margin-left: auto; }
         .nav-links a { 
             text-decoration: none; color: #444; font-size: 14px; font-weight: 600; 
@@ -35,25 +35,28 @@
         .search-area { 
             max-width: 600px; margin: 0 auto; display: flex; background: white; 
             padding: 5px; border-radius: 50px; position: relative;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3); align-items: center;
         }
         .search-area input { 
             flex: 1; border: none; padding: 12px 20px; outline: none; 
             font-size: 16px; border-radius: 50px; color: #333;
         }
         
-        /* Perfectly fitted icon button */
+        /* Fixed: Icon fits perfectly within the search area padding */
         .btn-dl { 
             background: var(--blue); color: white; border: none; 
-            width: 50px; height: 50px; border-radius: 50%; 
+            width: 48px; height: 48px; border-radius: 50%; 
             display: flex; align-items: center; justify-content: center;
-            cursor: pointer; transition: 0.3s; flex-shrink: 0;
+            cursor: pointer; transition: 0.3s; margin-right: 2px;
         }
-        .btn-dl span { display: none; } /* Hide text by default to fit icon look */
-        .btn-dl i { display: block; font-size: 18px; }
-        .btn-dl:hover { transform: scale(1.1); background: #1a56d6; }
+        .btn-dl i { font-size: 18px; }
+        .btn-dl:hover { background: #1a56d6; transform: scale(1.05); }
 
-        /* --- 3. VIDEO RESULT --- */
+        /* --- 3. LOADING SPINNER --- */
+        #loader { display: none; margin: 20px auto; border: 4px solid #f3f3f3; border-top: 4px solid var(--blue); border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        /* VIDEO RESULT */
         #resultArea { 
             display: none; max-width: 500px; margin: -50px auto 40px; background: white; 
             padding: 25px; border-radius: 24px; border: 1px solid #eee; 
@@ -61,39 +64,39 @@
         }
         video { width: 100%; border-radius: 15px; border: 4px solid #f0f0f0; margin-bottom: 15px; }
 
-        /* --- 4. FAQ TOGGLE LOGIC --- */
+        /* --- 4. ALL SECTIONS RECOVERED --- */
+        .section { padding: 80px 10%; }
+        .section-h { text-align: center; margin-bottom: 50px; font-size: 28px; font-weight: 800; }
+
+        /* Steps */
+        .step-card { display: flex; align-items: center; gap: 30px; background: #fff; padding: 30px; border-radius: 20px; margin-bottom: 25px; border: 1px solid #f0f0f0; }
+        .step-num { font-size: 40px; font-weight: 900; color: rgba(45, 109, 246, 0.1); min-width: 60px; }
+
+        /* Updates */
+        .updates-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+        .update-item { background: var(--dark); color: white; border-radius: 20px; overflow: hidden; }
+        .up-thumb { height: 160px; background: #222; display: flex; align-items: center; justify-content: center; }
+
+        /* FAQ Content Toggle */
         .faq-box { max-width: 800px; margin: 0 auto; }
-        .faq-item { border-bottom: 1px solid #eee; padding: 20px 0; cursor: pointer; transition: 0.3s; }
-        .faq-item h4 { margin: 0; display: flex; justify-content: space-between; align-items: center; }
-        .faq-answer { 
-            max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; 
-            color: #666; font-size: 14px; margin-top: 0;
-        }
+        .faq-item { border-bottom: 1px solid #eee; padding: 20px 0; cursor: pointer; }
+        .faq-item h4 { margin: 0; display: flex; justify-content: space-between; align-items: center; font-size: 16px; }
+        .faq-answer { max-height: 0; overflow: hidden; transition: 0.4s ease; color: #666; font-size: 14px; }
         .faq-item.active .faq-answer { max-height: 200px; margin-top: 15px; }
         .faq-item .fa-minus { display: none; }
         .faq-item.active .fa-plus { display: none; }
-        .faq-item.active .fa-minus { display: inline-block; }
+        .faq-item.active .fa-minus { display: inline-block; color: var(--blue); }
 
-        /* RE-USED SECTIONS STYLES */
-        .section { padding: 80px 10%; }
-        .section-h { text-align: center; margin-bottom: 50px; font-size: 28px; font-weight: 800; }
-        .step-card { display: flex; align-items: center; gap: 30px; background: #fff; padding: 30px; border-radius: 20px; margin-bottom: 25px; border: 1px solid #f0f0f0; }
-        .step-num { font-size: 40px; font-weight: 900; color: rgba(45, 109, 246, 0.1); min-width: 60px; }
-        .updates-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
-        .update-item { background: var(--dark); color: white; border-radius: 20px; overflow: hidden; display: flex; flex-direction: column; }
-        .up-thumb { height: 160px; background: #222; display: flex; align-items: center; justify-content: center; }
-        .footer { background: #0b0d11; color: white; padding: 80px 10% 40px; }
+        /* --- 5. FOOTER RECOVERED --- */
+        .footer { background: #0b0d11; color: white; padding: 60px 10% 30px; }
+        .footer-content { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 30px; }
+        .footer-logo h3 { color: var(--blue); margin-bottom: 10px; }
+        .footer-links a { color: #888; text-decoration: none; display: block; margin-bottom: 8px; font-size: 14px; }
 
-        /* MOBILE FIXES */
         @media (max-width: 768px) {
-            .nav-links { 
-                display: none; position: absolute; top: 100%; right: 0; width: 220px; 
-                background: white; flex-direction: column; padding: 20px; border-radius: 0 0 0 15px;
-                box-shadow: -5px 5px 15px rgba(0,0,0,0.1); text-align: right;
-            }
+            .nav-links { display: none; position: absolute; top: 100%; right: 0; width: 220px; background: white; flex-direction: column; padding: 20px; box-shadow: -5px 5px 15px rgba(0,0,0,0.1); }
             .nav-links.active { display: flex; }
             .menu-toggle { display: block; margin-left: auto; }
-            .hero h1 { font-size: 24px; }
         }
     </style>
 </head>
@@ -119,12 +122,13 @@
                 <i class="fas fa-download"></i>
             </button>
         </div>
+        <div id="loader"></div>
     </section>
 
     <div id="resultArea">
         <video id="videoPlayer" controls></video>
         <div id="dlLinks"></div>
-        <button class="btn-another" onclick="location.reload()" style="background:#f0f2f5; border:none; padding:12px 25px; border-radius:50px; cursor:pointer; margin-top:15px;">🔄 Download Another Video</button>
+        <button onclick="location.reload()" style="background:#f0f2f5; border:none; padding:10px 20px; border-radius:50px; cursor:pointer; margin-top:15px; font-weight:600;">🔄 Download Another</button>
     </div>
 
     <section class="section" id="how">
@@ -133,7 +137,7 @@
             <div class="step-num">01</div>
             <div>
                 <h4>ሊንኩን ኮፒ ያድርጉ</h4>
-                <p>ቪዲዮውን 'Copy Link' በማለት ሊንኩን ይያዙ።</p>
+                <p>ሊያወርዱት የፈለጉትን ቪዲዮ 'Copy Link' በማድረግ ሊንኩን ይያዙ።</p>
             </div>
         </div>
         </section>
@@ -144,8 +148,8 @@
             <div class="update-item">
                 <div class="up-thumb"><i class="fas fa-play-circle" style="font-size:40px; color:var(--blue);"></i></div>
                 <div class="up-content" style="padding:20px;">
-                    <h4>4K Reels Support</h4>
-                    <p>ሪልስ ቪዲዮዎችን በከፍተኛ ጥራት ማውረድ ተጀምሯል።</p>
+                    <h4>Reels Support</h4>
+                    <p>አሁን የፌስቡክ ሪልስ ቪዲዮዎችን በቀላሉ ማውረድ ይችላሉ።</p>
                 </div>
             </div>
         </div>
@@ -157,35 +161,37 @@
             <div class="faq-item" onclick="toggleFaq(this)">
                 <h4>አገልግሎቱ ነፃ ነው? <span><i class="fas fa-plus"></i><i class="fas fa-minus"></i></span></h4>
                 <div class="faq-answer">
-                    <p>አዎ! Yasingን ለመጠቀም ምንም አይነት ክፍያ አይጠበቅብዎትም።</p>
+                    <p>አዎ! Yasingን ለመጠቀም ምንም አይነት ክፍያ አይጠበቅብዎትም::</p>
                 </div>
             </div>
             <div class="faq-item" onclick="toggleFaq(this)">
-                <h4>ቲክቶክ ይደግፋል? <span><i class="fas fa-plus"></i><i class="fas fa-minus"></i></span></h4>
+                <h4>ቪዲዮው የት ነው የሚቀመጠው? <span><i class="fas fa-plus"></i><i class="fas fa-minus"></i></span></h4>
                 <div class="faq-answer">
-                    <p>አዎ! ፌስቡክን ጨምሮ የተለያዩ የማህበራዊ ገጾችን ይደግፋል።</p>
+                    <p>ብዙውን ጊዜ በስልክዎ 'Downloads' ወይም 'Gallery' ውስጥ ይገኛል።</p>
                 </div>
             </div>
         </div>
     </section>
 
     <footer class="footer" id="contact">
-        <div style="text-align:center; opacity:0.3; font-size:11px;">
-            © 2026 YasinG Downloader. All rights reserved.
+        <div class="footer-content">
+            <div class="footer-logo">
+                <h3>YasinG</h3>
+                <p style="color:#666; font-size:13px; max-width:250px;">ምርጥ የማህበራዊ ሚዲያ ቪዲዮ ማውረጃ።</p>
+            </div>
+            <div class="footer-links">
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Contact Us</a>
+            </div>
         </div>
+        <p style="text-align:center; margin-top:40px; color:#444; font-size:11px;">© 2026 YasinG Downloader. All rights reserved.</p>
     </footer>
 
     <script>
-        function toggleMenu() {
-            document.getElementById('navLinks').classList.toggle('active');
-        }
-
-        function toggleFaq(element) {
-            // Close other open FAQ items if needed (optional)
-            // document.querySelectorAll('.faq-item').forEach(item => { if(item !== element) item.classList.remove('active'); });
-            
-            element.classList.toggle('active');
-        }
+        function toggleMenu() { document.getElementById('navLinks').classList.toggle('active'); }
+        
+        function toggleFaq(el) { el.classList.toggle('active'); }
 
         async function autoPaste() {
             try {
@@ -196,21 +202,29 @@
 
         async function startDownload() {
             const url = document.getElementById('urlInput').value;
-            const resArea = document.getElementById('resultArea');
+            const loader = document.getElementById('loader');
+            const resultArea = document.getElementById('resultArea');
             if(!url) return;
+            
+            loader.style.display = "block";
+            resultArea.style.display = "none";
+
             try {
                 const res = await fetch(`/api/info?url=${encodeURIComponent(url)}`);
                 const data = await res.json();
+                loader.style.display = "none";
+                
                 if(data.error) { alert(data.error); return; }
-                resArea.style.display = "block";
+                
+                resultArea.style.display = "block";
                 document.getElementById('videoPlayer').src = data.formats[0].url;
                 let html = `<h4 style="margin:15px 0;">${data.title}</h4>`;
                 data.formats.forEach(f => {
                     html += `<a href="${f.url}" target="_blank" style="display:block; background:var(--blue); color:white; text-decoration:none; padding:12px; border-radius:10px; margin-bottom:10px; font-weight:bold; text-align:center;">Download ${f.quality}</a>`;
                 });
                 document.getElementById('dlLinks').innerHTML = html;
-                resArea.scrollIntoView({ behavior: 'smooth' });
-            } catch (e) { alert("Error connecting to server."); }
+                resultArea.scrollIntoView({ behavior: 'smooth' });
+            } catch (e) { loader.style.display = "none"; alert("Error connecting to server."); }
         }
     </script>
 </body>
