@@ -3,138 +3,213 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YasinG Downloader</title>
+    <title>YasinG - Facebook Video Downloader</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root { --blue: #2d6df6; --bg: #0b0d11; --card: #16191f; --text-dim: #888; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); color: white; margin: 0; }
+        :root { --blue: #2d6df6; --dark: #1a1d23; --light-bg: #f8f9fa; --text: #333; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; color: var(--text); background: white; line-height: 1.6; }
 
-        /* Navigation Fix for Desktop/Mobile */
-        .nav { display: flex; justify-content: space-between; padding: 15px 5%; border-bottom: 1px solid #222; position: sticky; top:0; background: var(--bg); z-index:1000; align-items: center; }
-        .logo { color: var(--blue); font-weight: 900; font-size: 24px; text-decoration:none; display: flex; align-items: center; gap: 8px; }
-        .menu-btn { font-size: 22px; cursor: pointer; color: white; background: none; border: none; }
+        /* Navigation Menu */
+        .nav { display: flex; justify-content: space-between; align-items: center; padding: 15px 10%; border-bottom: 1px solid #eee; position: sticky; top: 0; background: white; z-index: 1000; }
+        .logo { font-size: 24px; font-weight: 800; color: var(--blue); text-decoration: none; }
+        .nav-links { display: flex; gap: 20px; }
+        .nav-links a { text-decoration: none; color: #555; font-size: 14px; font-weight: 500; }
+
+        /* Hero / Download Section */
+        .hero { background: var(--dark); color: white; padding: 80px 20px; text-align: center; }
+        .hero h1 { font-size: 32px; margin-bottom: 10px; }
+        .hero p { color: #aaa; margin-bottom: 30px; }
         
-        .nav-menu { display: none; flex-direction: column; position: absolute; top: 60px; right: 5%; width: 200px; background: var(--card); border: 1px solid #333; border-radius: 12px; z-index: 2000; overflow: hidden; }
-        .nav-menu.active { display: flex; }
-        .nav-menu a { color: white; padding: 12px 20px; text-decoration: none; font-size: 14px; border-bottom: 1px solid #222; }
+        .search-container { max-width: 600px; margin: 0 auto; display: flex; background: white; padding: 5px; border-radius: 50px; overflow: hidden; }
+        .search-container input { flex: 1; border: none; padding: 15px 25px; outline: none; font-size: 16px; }
+        .btn-main { background: var(--blue); color: white; border: none; padding: 15px 40px; border-radius: 50px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .btn-main:hover { background: #1a56d6; }
 
-        /* Main Wrapper (Fixes the Desktop 'Stretch' Issue) */
-        .main-wrapper { max-width: 600px; margin: 0 auto; padding: 20px; }
+        /* Features Section */
+        .section { padding: 80px 10%; text-align: center; }
+        .bg-light { background: var(--light-bg); }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; margin-top: 40px; }
+        
+        .feature-card { background: white; padding: 40px 20px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+        .feature-card i { font-size: 40px; color: var(--blue); margin-bottom: 20px; }
+        .feature-card h3 { margin-bottom: 15px; }
+        .feature-card p { font-size: 14px; color: #777; }
 
-        .main-card { background: var(--card); border-radius: 28px; padding: 30px; border: 1px solid #222; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        .input-box { background: #1e222a; border-radius: 16px; display: flex; padding: 6px; margin: 25px 0; border: 1px solid #333; }
-        input { flex: 1; background: transparent; border: none; color: white; padding: 12px; outline: none; font-size: 14px; }
-        .btn-search { background: var(--blue); border: none; color: white; padding: 10px 22px; border-radius: 12px; font-weight: bold; cursor: pointer; }
+        /* Steps Section (Instructional) */
+        .step-box { display: flex; align-items: flex-start; gap: 20px; text-align: left; margin-bottom: 30px; background: white; padding: 25px; border-radius: 12px; border: 1px solid #eee; }
+        .step-num { background: var(--blue); color: white; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; flex-shrink: 0; }
 
-        /* Stylish Video & Border */
-        .preview-box { width: 100%; border-radius: 20px; overflow: hidden; margin-top: 25px; display: none; border: 2px solid var(--blue); box-shadow: 0 0 15px rgba(45, 109, 246, 0.3); position: relative; }
-        video { width: 100%; display: block; background: #000; }
-        .info-badge { background: rgba(45, 109, 246, 0.15); border: 1px solid var(--blue); color: var(--blue); padding: 6px 14px; border-radius: 20px; font-size: 11px; display: inline-block; margin-top: 15px; font-weight: bold; }
+        /* FAQ Section */
+        .faq-item { text-align: left; max-width: 800px; margin: 0 auto 15px; background: white; border: 1px solid #eee; border-radius: 8px; overflow: hidden; }
+        .faq-question { padding: 20px; cursor: pointer; font-weight: bold; display: flex; justify-content: space-between; }
+        .faq-answer { padding: 0 20px 20px; color: #666; font-size: 14px; display: none; }
 
-        /* Stylish Steps (Updated per request) */
-        .section-title { margin: 50px 0 25px; font-size: 22px; font-weight: 800; text-align: center; }
-        .steps-container { display: flex; flex-direction: column; gap: 15px; }
-        .step-card { 
-            background: linear-gradient(145deg, #1a1d24, #14171c); 
-            padding: 25px; border-radius: 24px; text-align: center; 
-            border: 1px solid #222; transition: 0.4s; position: relative;
-        }
-        .step-card:hover { border-color: var(--blue); transform: scale(1.02); }
-        .step-card i { color: var(--blue); font-size: 28px; margin-bottom: 15px; filter: drop-shadow(0 0 5px var(--blue)); }
-        .step-card h4 { font-size: 15px; margin: 5px 0; }
-        .step-card p { font-size: 11.5px; color: var(--text-dim); line-height: 1.6; }
+        /* Footer */
+        .footer { background: #111; color: white; padding: 60px 10% 20px; text-align: left; }
+        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; }
+        .footer h4 { margin-bottom: 20px; color: var(--blue); }
+        .footer ul { list-style: none; padding: 0; }
+        .footer ul li { margin-bottom: 10px; }
+        .footer ul li a { color: #888; text-decoration: none; font-size: 14px; }
+        .copy { border-top: 1px solid #222; margin-top: 40px; padding-top: 20px; text-align: center; color: #555; font-size: 12px; }
 
-        /* Updates Section (Restored) */
-        .updates-container { margin-top: 40px; }
-        .update-box { background: rgba(45, 109, 246, 0.05); border-left: 4px solid var(--blue); padding: 15px; border-radius: 12px; margin-bottom: 12px; display: flex; gap: 15px; align-items: center; }
-        .update-box i { font-size: 18px; color: var(--blue); }
-        .update-box p { font-size: 12px; margin: 0; color: #ccc; }
-
-        .dl-btn { display: block; background: #22262e; color: white; text-decoration: none; padding: 16px; border-radius: 14px; margin-top: 10px; border: 1px solid #333; font-weight: 700; font-size: 14px; }
-        .dl-btn:hover { background: var(--blue); }
-
-        .footer { padding: 40px 20px; border-top: 1px solid #222; text-align: center; margin-top: 60px; }
-        .social-icons { display: flex; justify-content: center; gap: 30px; margin-bottom: 20px; }
-        .social-icons a { color: var(--text-dim); font-size: 22px; }
-
-        .loader { display: none; margin: 20px auto; border: 3px solid #222; border-top: 3px solid var(--blue); border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        /* Result Area */
+        #resultArea { margin-top: 30px; display: none; background: white; padding: 20px; border-radius: 15px; color: var(--text); border: 2px solid var(--blue); }
+        video { width: 100%; border-radius: 10px; margin-bottom: 15px; }
     </style>
 </head>
 <body>
 
     <nav class="nav">
-        <a href="/" class="logo"><i class="fab fa-facebook"></i> YasinG</a>
-        <button class="menu-btn" onclick="toggleMenu()"><i class="fas fa-bars"></i></button>
-        <div class="nav-menu" id="navMenu">
-            <a href="#">እንዴት እንደሚሰራ</a>
-            <a href="#">ዜናዎች</a>
-            <a href="#">ጥያቄዎች</a>
+        <a href="/" class="logo">YasinG</a>
+        <div class="nav-links">
+            <a href="#">Home</a>
+            <a href="#features">Features</a>
+            <a href="#how-to">How To</a>
+            <a href="#faq">FAQ</a>
         </div>
     </nav>
 
-    <div class="main-wrapper">
-        <div class="main-card">
-            <h2 style="font-size: 24px; margin-top: 0;">ቪዲዮ ማውረጃ</h2>
-            <div class="input-box">
-                <input type="text" id="urlInput" placeholder="ሊንኩን እዚህ ያስገቡ..." onfocus="autoPaste()">
-                <button class="btn-search" onclick="startDownload()">አውርድ</button>
+    <div class="hero">
+        <h1>Facebook Video Downloader</h1>
+        <p>Download Facebook Video Online for Free</p>
+        <div class="search-container">
+            <input type="text" id="urlInput" placeholder="Paste video URL here..." onfocus="autoPaste()">
+            <button class="btn-main" onclick="startDownload()">Download</button>
+        </div>
+        
+        <div id="loader" style="display:none; margin-top:20px;"><i class="fas fa-spinner fa-spin"></i> Processing...</div>
+        
+        <div id="resultArea" class="main-wrapper" style="max-width: 500px; margin: 30px auto;">
+            <video id="videoPlayer" controls></video>
+            <div id="downloadLinks"></div>
+        </div>
+    </div>
+
+    <div class="section" id="features">
+        <h2>Our Features</h2>
+        <p>Effortless Facebook Video Downloads at Your Fingertips</p>
+        <div class="grid">
+            <div class="feature-card">
+                <i class="fas fa-bolt"></i>
+                <h3>High Quality</h3>
+                <p>Save videos in MP4, Full HD, and 2K formats with clear sound.</p>
             </div>
-
-            <div id="loader" class="loader"></div>
-            <div id="previewBox" class="preview-box"><video id="videoPlayer" controls></video></div>
-            <div id="results"></div>
-            <button id="resetBtn" style="display:none; background:none; border:none; color:var(--text-dim); cursor:pointer; margin-top:15px;" onclick="location.reload()">🔄 ሌላ ቪዲዮ አውርድ</button>
+            <div class="feature-card">
+                <i class="fas fa-mobile-alt"></i>
+                <h3>Simple to Use</h3>
+                <p>Easily download Facebook videos on any device with a single click.</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-gift"></i>
+                <h3>Absolutely Free</h3>
+                <p>Our service is 100% free to use. We only show minimal ads for support.</p>
+            </div>
         </div>
+    </div>
 
-        <h3 class="section-title">እንዴት ማውረድ ይቻላል?</h3>
-        <div class="steps-container">
-            <div class="step-card"><i class="fas fa-link"></i><h4>1. ሊንክ ቅዱ</h4><p>የቪዲዮውን ሊንክ ከፌስቡክ ወይም ቲክቶክ ኮፒ ያድርጉ።</p></div>
-            <div class="step-card"><i class="fas fa-paste"></i><h4>2. እዚህ ይለጥፉ</h4><p>ሊንኩን ከላይ ባለው ሳጥን ውስጥ 'ለጥፍ' በማለት ያስገቡ።</p></div>
-            <div class="step-card"><i class="fas fa-download"></i><h4>3. ያውርዱ</h4><p>ጥራት መርጠው ቪዲዮውን ወደ ስልክዎ ያውርዱ።</p></div>
+    <div class="section bg-light" id="how-to">
+        <h2>How To Use?</h2>
+        <p>Follow These Easy Steps to Keep Your Videos</p>
+        <div style="max-width: 700px; margin: 40px auto;">
+            <div class="step-box">
+                <div class="step-num">1</div>
+                <div>
+                    <h4>Copy the URL</h4>
+                    <p>Copy the video URL from Facebook by clicking 'Copy Link' in the share menu.</p>
+                </div>
+            </div>
+            <div class="step-box">
+                <div class="step-num">2</div>
+                <div>
+                    <h4>Paste into Input</h4>
+                    <p>Paste the link into the box at the top of this page.</p>
+                </div>
+            </div>
+            <div class="step-box">
+                <div class="step-num">3</div>
+                <div>
+                    <h4>Hit Download</h4>
+                    <p>Choose your quality and save the video to your device.</p>
+                </div>
+            </div>
         </div>
+    </div>
 
-        <div class="updates-container">
-            <h3 class="section-title" style="text-align:left; color:var(--blue);">ዜናዎች</h3>
-            <div class="update-box"><i class="fas fa-bolt"></i><p>V2.5 Update: ቪዲዮዎችን በከፍተኛ ፍጥነት የማውረድ አዲስ ሰርቨሮች ተጨምረዋል።</p></div>
-            <div class="update-box"><i class="fas fa-sync"></i><p>Facebook Update: ሪልስ (Reels) ቪዲዮዎችን ማውረድ አሁን ይቻላል።</p></div>
+    <div class="section" id="faq">
+        <h2>Got Questions?</h2>
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">Is this downloader free? <i class="fas fa-chevron-down"></i></div>
+            <div class="faq-answer">Yes, our tool is completely free and requires no registration.</div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">Which browsers are supported? <i class="fas fa-chevron-down"></i></div>
+            <div class="faq-answer">We support Chrome, Safari, Firefox, and all modern mobile browsers.</div>
         </div>
     </div>
 
     <footer class="footer">
-        <div class="social-icons">
-            <a href="#"><i class="fab fa-telegram"></i></a>
-            <a href="#"><i class="fab fa-facebook"></i></a>
-            <a href="#"><i class="fab fa-instagram"></i></a>
+        <div class="footer-grid">
+            <div>
+                <h4>YasinG</h4>
+                <p style="font-size:13px; color:#666;">The best online tool for downloading social media videos safely and quickly.</p>
+            </div>
+            <div>
+                <h4>Company</h4>
+                <ul>
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Contact Us</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4>Support</h4>
+                <ul>
+                    <li><a href="#">Terms of Service</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                </ul>
+            </div>
         </div>
-        <div style="font-size: 11px; color: #555;">© 2026 YASING.COM.ET | ETHIOPIA</div>
+        <div class="copy">Copyright © 2026 YasinG Downloader. All rights reserved.</div>
     </footer>
 
     <script>
-        function toggleMenu() { document.getElementById('navMenu').classList.toggle('active'); }
-        async function autoPaste() { try { const t = await navigator.clipboard.readText(); if(t.includes('http')) document.getElementById('urlInput').value = t; } catch(e){} }
-        
+        function toggleFaq(el) {
+            const ans = el.nextElementSibling;
+            ans.style.display = ans.style.display === "block" ? "none" : "block";
+        }
+
+        async function autoPaste() {
+            try {
+                const text = await navigator.clipboard.readText();
+                if(text.includes('http')) document.getElementById('urlInput').value = text;
+            } catch (e) {}
+        }
+
         async function startDownload() {
             const url = document.getElementById('urlInput').value;
-            const resDiv = document.getElementById('results');
             const loader = document.getElementById('loader');
-            const preview = document.getElementById('previewBox');
+            const resultArea = document.getElementById('resultArea');
             if(!url) return;
-            loader.style.display="block"; resDiv.innerHTML=""; preview.style.display="none";
+
+            loader.style.display = "block";
+            resultArea.style.display = "none";
+
             try {
                 const res = await fetch(`/api/info?url=${encodeURIComponent(url)}`);
                 const data = await res.json();
-                loader.style.display="none";
-                if(data.error) { resDiv.innerHTML=`<p style="color:red;font-size:12px">${data.error}</p>`; return; }
-                preview.style.display="block";
+                loader.style.display = "none";
+
+                if(data.error) { alert(data.error); return; }
+
+                resultArea.style.display = "block";
                 document.getElementById('videoPlayer').src = data.formats[0].url;
-                let html = `<div class="info-badge">Video by: ${data.uploader}</div><p style="font-size:12px;color:#aaa;margin:10px 0;">${data.title}</p>`;
+                
+                let html = `<h3>${data.title}</h3>`;
                 data.formats.forEach(f => {
-                    html += `<a href="${f.url}" target="_blank" class="dl-btn">🎬 ${f.quality} አውርድ</a>`;
+                    html += `<a href="${f.url}" target="_blank" class="btn-main" style="display:block; text-align:center; margin-top:10px; text-decoration:none;">Download ${f.quality}</a>`;
                 });
-                resDiv.innerHTML = html;
-                document.getElementById('resetBtn').style.display="inline-block";
-            } catch(e) { loader.style.display="none"; resDiv.innerHTML="Server Error"; }
+                document.getElementById('downloadLinks').innerHTML = html;
+            } catch (e) { loader.style.display = "none"; alert("Error connecting to server."); }
         }
     </script>
 </body>
