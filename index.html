@@ -7,6 +7,20 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
+.hero::before {
+    content: "";
+    position: absolute;
+    background-image: url('15840.jpg');
+    /* ... other styles ... */
+    z-index: 1;
+    pointer-events: none; /* This ensures clicks go THROUGH the image to the button */
+}
+
+.search-area {
+    position: relative;
+    z-index: 10; /* This puts the search bar on top of the image */
+}
+
         html, body { min-height: 100vh; scroll-behavior: smooth; }
         .hero-bg {
             background: linear-gradient(rgba(9, 9, 11, 0.8), rgba(9, 9, 11, 0.9)), 
@@ -186,6 +200,17 @@
                     alert("ቪዲዮው አልተገኘም!");
                     return;
                 }
+async function startDownload() {
+    const urlValue = document.getElementById('urlInput').value;
+    if(!urlValue) return alert("Please paste a link!");
+
+    // Change the fetch URL to /api/info to match your vercel.json update
+    const response = await fetch('/api/info?url=' + encodeURIComponent(urlValue));
+    const data = await response.json();
+    
+    // Process your video data here
+    console.log(data);
+}
 
                 if (data.thumbnail) {
                     list.innerHTML = `
