@@ -8,83 +8,73 @@
     <style>
         :root { --blue: #2d6df6; --dark: #1a1d23; --text: #333; }
         
-        /* Fix for desktop white space */
+        /* Ensures the footer stays at the bottom and prevents white space */
         html, body { height: 100%; margin: 0; display: flex; flex-direction: column; }
         body { font-family: 'Inter', sans-serif; color: var(--text); background: white; scroll-behavior: smooth; }
 
-        /* --- NAVIGATION --- */
-        .nav { display: flex; justify-content: space-between; align-items: center; padding: 15px 8%; background: white; border-bottom: 1px solid rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 2000; width: 100%; box-sizing: border-box; }
+        /* --- TOP MENU NAVIGATION --- */
+        .nav { 
+            display: flex; justify-content: space-between; align-items: center; 
+            padding: 15px 8%; background: white; border-bottom: 1px solid rgba(0,0,0,0.05); 
+            position: sticky; top: 0; z-index: 2000; width: 100%; box-sizing: border-box; 
+        }
         .logo { font-size: 26px; font-weight: 900; color: var(--blue); text-decoration: none; }
-        .nav-links { display: flex; gap: 25px; margin-left: auto; }
-        .nav-links a { text-decoration: none; color: #444; font-size: 14px; font-weight: 600; }
+        .nav-links { display: flex; gap: 25px; align-items: center; margin-left: auto; }
+        .nav-links a { text-decoration: none; color: #444; font-size: 14px; font-weight: 600; transition: 0.3s; }
+        .nav-links a:hover { color: var(--blue); }
+        .menu-toggle { display: none; font-size: 22px; cursor: pointer; }
 
-        /* --- HERO SECTION WITH BACKGROUND IMAGE --- */
+        /* --- HERO DOWNLOADER WITH BACKGROUND --- */
         .hero { 
-            position: relative;
-            padding: 100px 20px;
-            text-align: center;
-            color: white;
-            overflow: hidden;
-            min-height: 400px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
+            position: relative; padding: 100px 20px; text-align: center; 
+            color: white; overflow: hidden; min-height: 450px; 
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
             background-color: var(--dark);
         }
 
-        /* Background image with 70% opacity */
+        /* Hero Background with 70% Opacity */
         .hero::before {
-            content: "";
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background-image: url('15840.jpg'); 
-            background-size: cover;
-            background-position: center 20%;
-            opacity: 0.7;
-            z-index: 1;
+            content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background-image: url('15840.jpg'); background-size: cover; background-position: center;
+            opacity: 0.7; z-index: 1;
         }
 
         .hero-content { position: relative; z-index: 2; max-width: 800px; }
         .hero h1 { font-size: 42px; margin-bottom: 10px; font-weight: 800; text-shadow: 0 2px 10px rgba(0,0,0,0.5); }
-        .hero p { font-size: 18px; margin-bottom: 30px; opacity: 0.9; text-shadow: 0 1px 5px rgba(0,0,0,0.5); }
+        .hero p { font-size: 18px; margin-bottom: 30px; opacity: 0.95; }
 
-        /* DOWNLOADER INPUT */
+        /* INPUT AREA */
         .search-area { 
             max-width: 550px; margin: 0 auto; display: flex; background: white; 
             padding: 6px; border-radius: 50px; box-shadow: 0 15px 35px rgba(0,0,0,0.4); 
             align-items: center; width: 90%;
         }
         .search-area input { flex: 1; border: none; padding: 12px 20px; outline: none; font-size: 16px; border-radius: 50px; color: #333; }
-        .btn-dl { background: var(--blue); color: white; border: none; width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.3s; }
+        .btn-dl { 
+            background: var(--blue); color: white; border: none; width: 48px; height: 48px; 
+            border-radius: 50%; display: flex; align-items: center; justify-content: center; 
+            cursor: pointer; transition: 0.3s; 
+        }
+        .btn-dl:hover { background: #1a56d6; transform: scale(1.05); }
 
         /* --- STEPS GRID --- */
         .section { padding: 80px 8%; }
         .section-h { text-align: center; margin-bottom: 50px; font-size: 30px; font-weight: 800; }
-        
         .steps-grid { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
-            gap: 25px; 
-            max-width: 1100px; 
-            margin: 0 auto; 
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
+            gap: 25px; max-width: 1100px; margin: 0 auto; 
         }
         .step-card { 
-            background: #fafafa; 
-            padding: 40px 20px; 
-            border-radius: 20px; 
-            text-align: center; 
-            border: 1px solid #eee; 
-            transition: 0.3s;
+            background: #fafafa; padding: 40px 20px; border-radius: 20px; 
+            text-align: center; border: 1px solid #eee; transition: 0.3s;
         }
         .step-card i { font-size: 40px; color: var(--blue); margin-bottom: 20px; }
         .step-card h4 { font-size: 20px; margin-bottom: 10px; }
-        .step-card p { font-size: 14px; color: #666; line-height: 1.6; }
 
-        /* --- UPDATES & FAQ SIDE-BY-SIDE --- */
+        /* --- UPDATES & FAQ GRID --- */
         .main-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 40px; padding: 60px 8%; background: #fcfcfc; }
         .post-card { background: white; border: 1px solid #eee; border-radius: 15px; padding: 15px; display: flex; gap: 15px; align-items: center; margin-bottom: 15px; }
-        .post-img { width: 80px; height: 80px; border-radius: 10px; object-fit: cover; background: #eee; }
+        .post-img-thumb { width: 70px; height: 70px; border-radius: 10px; background: #eee; flex-shrink: 0; }
         
         .faq-item { background: white; border: 1px solid #eee; border-radius: 12px; margin-bottom: 10px; padding: 15px; cursor: pointer; }
         .faq-answer { max-height: 0; overflow: hidden; transition: 0.3s ease; color: #777; font-size: 14px; }
@@ -93,12 +83,12 @@
         /* --- FOOTER --- */
         .footer { background: #0b0d11; color: white; padding: 50px 8% 20px; margin-top: auto; }
         .footer-content { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 30px; max-width: 1200px; margin: 0 auto; }
-        .social-btn { text-decoration: none; color: white; background: #1a1d23; padding: 10px 15px; border-radius: 10px; display: flex; align-items: center; gap: 10px; border: 1px solid #333; }
+        .social-btn { text-decoration: none; color: white; background: #1a1d23; padding: 10px 15px; border-radius: 10px; display: flex; align-items: center; gap: 10px; border: 1px solid #333; margin-top: 10px; }
 
         @media (max-width: 850px) {
             .main-grid { grid-template-columns: 1fr; }
-            .hero h1 { font-size: 32px; }
             .nav-links { display: none; }
+            .menu-toggle { display: block; }
         }
     </style>
 </head>
@@ -106,77 +96,80 @@
 
     <nav class="nav">
         <a href="/" class="logo">YasinG</a>
-        <div class="nav-links">
-            <a href="#how">How It Works</a>
+        <div class="menu-toggle" onclick="toggleMenu()"><i class="fas fa-bars"></i></div>
+        <div class="nav-links" id="navLinks">
+            <a href="#how">How to Download</a>
             <a href="#updates">Updates</a>
             <a href="#faq">FAQs</a>
-            <a href="#contact">Contact</a>
+            <a href="#contact">Contact Us</a>
         </div>
     </nav>
 
-    <section class="hero">
-        <div class="hero-content">
-            <h1>Download Facebook Videos</h1>
-            <p>Fast, Simple, and High-Quality. 100% Free.</p>
-            <div class="search-area">
-                <input type="text" id="urlInput" placeholder="Paste your video link here...">
-                <button class="btn-dl" onclick="startDownload()"><i class="fas fa-download"></i></button>
+    <div class="content-wrap">
+        <section class="hero">
+            <div class="hero-content">
+                <h1>Download Facebook Videos</h1>
+                <p>Fast, Simple, and Secure. 100% Free Forever.</p>
+                <div class="search-area">
+                    <input type="text" id="urlInput" placeholder="Paste your video link here..." onfocus="autoPaste()">
+                    <button class="btn-dl" onclick="startDownload()"><i class="fas fa-download"></i></button>
+                </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <section class="section" id="how">
-        <h2 class="section-h">How to Download</h2>
-        <div class="steps-grid">
-            <div class="step-card">
-                <i class="fas fa-link"></i>
-                <h4>1. Copy Link</h4>
-                <p>Find the Facebook video you want and copy its URL/Link.</p>
+        <section class="section" id="how">
+            <h2 class="section-h">Three Simple Steps</h2>
+            <div class="steps-grid">
+                <div class="step-card">
+                    <i class="fas fa-link"></i>
+                    <h4>1. Copy Link</h4>
+                    <p>Copy the URL of the Facebook video you want to download.</p>
+                </div>
+                <div class="step-card">
+                    <i class="fas fa-paste"></i>
+                    <h4>2. Paste Here</h4>
+                    <p>Paste the link in the search box at the top of the page.</p>
+                </div>
+                <div class="step-card">
+                    <i class="fas fa-download"></i>
+                    <h4>3. Enjoy!</h4>
+                    <p>Choose the video quality and save the file to your device.</p>
+                </div>
             </div>
-            <div class="step-card">
-                <i class="fas fa-paste"></i>
-                <h4>2. Paste URL</h4>
-                <p>Paste the link into the search box at the top of this page.</p>
-            </div>
-            <div class="step-card">
-                <i class="fas fa-file-download"></i>
-                <h4>3. Download</h4>
-                <p>Choose your preferred quality and save the video to your device.</p>
-            </div>
-        </div>
-    </section>
+        </section>
 
-    <div class="main-grid">
-        <div id="updates">
-            <h3 style="margin-top:0">Latest Updates</h3>
-            <div class="post-card">
-                <div class="post-img"></div>
-                <div><h4>Reels Support</h4><p>Download Facebook Reels in HD quality instantly.</p></div>
+        <div class="main-grid">
+            <div id="updates">
+                <h3 style="margin-top:0">News & Updates</h3>
+                <div class="post-card">
+                    <div class="post-img-thumb"></div>
+                    <div><h4>Facebook Reels Support</h4><p>We now support high-quality Reel downloads.</p></div>
+                </div>
+                <div class="post-card">
+                    <div class="post-img-thumb"></div>
+                    <div><h4>New Fast Servers</h4><p>Processing speeds have been doubled this week.</p></div>
+                </div>
             </div>
-            <div class="post-card">
-                <div class="post-img"></div>
-                <div><h4>Faster Speed</h4><p>Servers upgraded for 2x faster download processing.</p></div>
-            </div>
-        </div>
 
-        <div id="faq">
-            <h3 style="margin-top:0">Frequently Asked Questions</h3>
-            <div class="faq-item" onclick="this.classList.toggle('active')">
-                <h4>Is this service free? <i class="fas fa-plus" style="font-size: 12px"></i></h4>
-                <div class="faq-answer">Yes, YasinG is completely free to use for everyone.</div>
-            </div>
-            <div class="faq-item" onclick="this.classList.toggle('active')">
-                <h4>Where are my videos saved? <i class="fas fa-plus" style="font-size: 12px"></i></h4>
-                <div class="faq-answer">Videos are usually saved in your device's "Downloads" folder.</div>
+            <div id="faq">
+                <h3 style="margin-top:0">Common Questions</h3>
+                <div class="faq-item" onclick="this.classList.toggle('active')">
+                    <h4>Is this service really free? <i class="fas fa-plus" style="font-size:12px"></i></h4>
+                    <div class="faq-answer">Yes! There are no hidden charges or subscriptions.</div>
+                </div>
+                <div class="faq-item" onclick="this.classList.toggle('active')">
+                    <h4>Which formats are supported? <i class="fas fa-plus" style="font-size:12px"></i></h4>
+                    <div class="faq-answer">We support MP4 formats in SD, HD, and 4K quality.</div>
+                </div>
             </div>
         </div>
     </div>
 
     <footer class="footer" id="contact">
         <div class="footer-content">
-            <div><h3 style="color:var(--blue); margin:0;">YasinG</h3><p style="color:#666; font-size:12px; margin-top:10px;">High speed social media downloader.</p></div>
+            <div><h3 style="color:var(--blue); margin:0;">YasinG</h3><p style="color:#666; font-size:12px; margin-top:10px;">Best social downloader for mobile & desktop.</p></div>
             <div>
-                <h4 style="margin:0 0 10px 0;">Follow Us</h4>
+                <h4 style="margin:0">Social Follow</h4>
                 <div style="display: flex; gap: 10px;">
                     <a href="#" class="social-btn"><i class="fab fa-telegram"></i> Telegram (12K)</a>
                     <a href="#" class="social-btn"><i class="fab fa-facebook"></i> Facebook (25K)</a>
@@ -187,11 +180,26 @@
     </footer>
 
     <script>
-        async function startDownload() {
+        // Menu Toggle
+        function toggleMenu() { document.getElementById('navLinks').classList.toggle('active'); }
+
+        // Auto Paste Function
+        async function autoPaste() {
+            try {
+                const text = await navigator.clipboard.readText();
+                if(text.includes('http')) {
+                    document.getElementById('urlInput').value = text;
+                }
+            } catch (err) {
+                console.log("Clipboard access denied or unavailable.");
+            }
+        }
+
+        // Logic placeholder
+        function startDownload() {
             const url = document.getElementById('urlInput').value;
-            if (!url) { alert("Please paste a URL first!"); return; }
-            alert("Processing: " + url);
-            // Add your API fetching logic here
+            if(!url) return alert("Please paste a link first!");
+            alert("Fetching video info for: " + url);
         }
     </script>
 </body>
