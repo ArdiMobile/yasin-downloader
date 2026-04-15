@@ -3,140 +3,101 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Yasing - Social Media Downloader</title>
+    <title>Yasing - Video Downloader</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { --blue: #2d6df6; --bg: #0b0d11; --card: #16191f; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); color: white; margin: 0; padding-bottom: 50px; }
-        
-        /* 4. Top Navigation Fix */
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: white; margin: 0; }
         .nav { display: flex; justify-content: space-between; padding: 20px; align-items: center; border-bottom: 1px solid #222; }
-        .logo { color: var(--blue); font-weight: 900; font-size: 22px; cursor: pointer; }
-        .nav-links { display: flex; gap: 15px; font-size: 12px; color: #888; }
-
+        .logo { color: var(--blue); font-weight: 900; font-size: 22px; }
         .container { max-width: 450px; margin: 20px auto; padding: 20px; }
         .main-card { background: var(--card); border-radius: 24px; padding: 30px; text-align: center; border: 1px solid #222; }
-        
-        /* Input & 3. Auto Paste */
-        .input-box { background: #1e222a; border-radius: 14px; display: flex; padding: 5px; margin: 25px 0; }
-        input { flex: 1; background: transparent; border: none; color: white; padding: 12px; outline: none; }
+        .input-box { background: #1e222a; border-radius: 14px; display: flex; padding: 5px; margin: 25px 0; border: 1px solid #333; }
+        input { flex: 1; background: transparent; border: none; color: white; padding: 12px; outline: none; width: 100%; }
         .btn-paste { background: var(--blue); border: none; color: white; padding: 10px 20px; border-radius: 10px; font-weight: bold; cursor: pointer; }
-
-        /* 1. Video Player Fix */
-        .preview-box { width: 100%; border-radius: 15px; overflow: hidden; margin-bottom: 20px; display: none; background: #000; position: relative; }
-        video { width: 100%; display: block; }
-
-        .dl-button { display: block; background: #252a34; color: white; text-decoration: none; padding: 14px; border-radius: 12px; margin-bottom: 10px; font-size: 14px; border: 1px solid #333; }
-        
-        /* Steps Section */
+        .loader { display: none; margin: 20px auto; border: 3px solid #333; border-top: 3px solid var(--blue); border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .preview-box { width: 100%; border-radius: 15px; overflow: hidden; margin-bottom: 20px; display: none; }
+        video { width: 100%; background: #000; }
+        .dl-btn { display: block; background: #252a34; color: white; text-decoration: none; padding: 15px; border-radius: 12px; margin-bottom: 10px; border: 1px solid #444; font-weight: bold; }
         .steps { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 40px; }
         .step { background: var(--card); padding: 15px; border-radius: 15px; font-size: 11px; text-align: center; color: #aaa; }
-        .step i { color: var(--blue); margin-bottom: 10px; font-size: 18px; display: block; }
-
-        /* 6. Footer Fix */
-        .footer { text-align: center; margin-top: 50px; padding: 20px; border-top: 1px solid #222; color: #555; font-size: 12px; }
-        
-        .loader { display: none; margin: 20px auto; border: 3px solid #333; border-top: 3px solid var(--blue); border-radius: 50%; width: 25px; height: 25px; animation: spin 1s linear infinite; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .footer { text-align: center; margin-top: 50px; padding: 30px; color: #555; font-size: 12px; }
     </style>
 </head>
 <body>
-
     <div class="nav">
         <div class="logo">YasinG</div>
-        <div class="nav-links">
-            <span>እንዴት እንደሚሰራ</span>
-            <span>ዜናዎች</span>
-            <span>ጥያቄዎች</span>
-        </div>
+        <div style="font-size: 12px; color: #888;">እንዴት እንደሚሰራ | ዜናዎች</div>
     </div>
 
     <div class="container">
         <div class="main-card">
-            <h2 style="font-size: 24px;">ቪዲዮ ማውረጃ</h2>
-            
+            <h2>ቪዲዮ ማውረጃ</h2>
             <div class="input-box">
                 <input type="text" id="urlInput" placeholder="ሊንኩን እዚህ ያስገቡ...">
-                <button class="btn-paste" onclick="handlePaste()">ለጥፍ</button>
+                <button class="btn-paste" onclick="handleAction()">ለጥፍ</button>
             </div>
-
             <div id="loader" class="loader"></div>
-            
             <div id="previewBox" class="preview-box">
-                <video id="videoPlayer" controls poster=""></video>
+                <video id="videoPlayer" controls></video>
             </div>
-
             <div id="results"></div>
-            
-            <div id="resetBtn" style="display:none; margin-top: 15px;">
-                <button onclick="location.reload()" style="background:none; border:none; color:#888; cursor:pointer;">🔄 ሌላ ቪዲዮ አውርድ</button>
-            </div>
         </div>
 
         <div class="steps">
-            <div class="step"><i class="fas fa-link"></i>1. ሊንክ ኮፒ አድርጉ</div>
-            <div class="step"><i class="fas fa-paste"></i>2. እዚህ ይለጥፉ</div>
-            <div class="step"><i class="fas fa-download"></i>3. ያውርዱ</div>
+            <div class="step"><i class="fas fa-link"></i><br>ኮፒ</div>
+            <div class="step"><i class="fas fa-paste"></i><br>ለጥፍ</div>
+            <div class="step"><i class="fas fa-download"></i><br>አውርድ</div>
         </div>
     </div>
 
-    <div class="footer">
-        <p>© 2026 YasinG Downloader. All rights reserved.</p>
-    </div>
+    <div class="footer">© 2026 YasinG Downloader. All rights reserved.</div>
 
     <script>
-        // 3. Auto Paste Function
-        async function handlePaste() {
+        async function handleAction() {
             try {
                 const text = await navigator.clipboard.readText();
-                document.getElementById('urlInput').value = text;
-                getDownloadLinks();
-            } catch (err) {
-                // If browser blocks clipboard, button still triggers search
-                getDownloadLinks();
-            }
+                if(text) document.getElementById('urlInput').value = text;
+            } catch (e) {}
+            startDownload();
         }
 
-        async function getDownloadLinks() {
+        async function startDownload() {
             const url = document.getElementById('urlInput').value;
-            const resultsDiv = document.getElementById('results');
-            const previewBox = document.getElementById('previewBox');
-            const videoPlayer = document.getElementById('videoPlayer');
+            const results = document.getElementById('results');
             const loader = document.getElementById('loader');
-            const resetBtn = document.getElementById('resetBtn');
+            const preview = document.getElementById('previewBox');
+            const player = document.getElementById('videoPlayer');
 
-            if (!url) return;
-
+            if(!url) return;
             loader.style.display = "block";
-            resultsDiv.innerHTML = "";
+            results.innerHTML = "";
+            preview.style.display = "none";
 
             try {
-                const response = await fetch(`/api/index?url=${encodeURIComponent(url)}`);
-                const data = await response.json();
+                // IMPORTANT: Matches the Python route /api/info
+                const res = await fetch(`/api/info?url=${encodeURIComponent(url)}`);
+                const data = await res.json();
                 loader.style.display = "none";
 
-                if (data.error) {
-                    resultsDiv.innerHTML = `<p style="color:red">${data.error}</p>`;
+                if(data.error) {
+                    results.innerHTML = `<p style="color:red">${data.error}</p>`;
                     return;
                 }
 
-                // Show Player
-                previewBox.style.display = "block";
-                videoPlayer.src = data.formats[0].url; // Set first available link to player
-                videoPlayer.poster = data.thumbnail;
+                preview.style.display = "block";
+                player.src = data.formats[0].url;
+                player.poster = data.thumbnail;
 
-                // 5. Build Buttons
-                let html = `<p style="font-size:12px; color:#888; margin: 15px 0;">${data.title}</p>`;
+                let html = `<p style="margin:15px 0; font-size:13px;">${data.title}</p>`;
                 data.formats.forEach(f => {
-                    html += `<a href="${f.url}" target="_blank" class="dl-button">🎬 Download ${f.resolution || 'Video'}</a>`;
+                    html += `<a href="${f.url}" target="_blank" class="dl-btn">🎬 ${f.quality} አውርድ</a>`;
                 });
-                
-                resultsDiv.innerHTML = html;
-                resetBtn.style.display = "block";
-
+                results.innerHTML = html;
             } catch (err) {
                 loader.style.display = "none";
-                resultsDiv.innerHTML = "Error connecting to server.";
+                results.innerHTML = "Error connecting to server.";
             }
         }
     </script>
