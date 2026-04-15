@@ -3,221 +3,164 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Yasing - Social Media Downloader</title>
+    <title>YasinG Downloader</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root {
-            --primary-blue: #2d6df6;
-            --bg-dark: #0f1115;
-            --card-bg: #1a1d23;
-        }
+        :root { --blue: #2d6df6; --bg: #0b0d11; --card: #16191f; }
+        
+        /* Force layout visibility */
+        html, body { height: 100%; margin: 0; padding: 0; background: var(--bg); color: white; font-family: 'Inter', sans-serif; }
+        
+        /* Navigation - Fixed across devices */
+        .nav { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; border-bottom: 1px solid #222; background: var(--bg); position: sticky; top: 0; z-index: 1000; }
+        .logo { color: var(--blue); font-weight: 900; font-size: 22px; text-decoration: none; }
+        .nav-links { display: flex; gap: 15px; }
+        .nav-links a { color: #888; text-decoration: none; font-size: 13px; }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-dark);
-            color: white;
-            margin: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-        }
+        /* Main Wrapper to prevent sections from disappearing */
+        .wrapper { display: flex; flex-direction: column; min-height: 100vh; align-items: center; padding-bottom: 40px; }
 
-        .header {
-            width: 100%;
-            padding: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-sizing: border-box;
-        }
+        .container { width: 90%; max-width: 450px; margin-top: 30px; }
 
-        .logo {
-            font-size: 24px;
-            font-weight: bold;
-            color: var(--primary-blue);
-            font-style: italic;
-        }
+        /* The Card */
+        .main-card { background: var(--card); border-radius: 24px; padding: 30px; text-align: center; border: 1px solid #222; width: 100%; box-sizing: border-box; }
+        
+        /* Input & Search Button Fix */
+        .input-box { background: #1e222a; border-radius: 14px; display: flex; padding: 5px; margin: 20px 0; border: 1px solid #333; }
+        input { flex: 1; background: transparent; border: none; color: white; padding: 12px; outline: none; width: 100%; font-size: 14px; }
+        .btn-search { background: var(--blue); border: none; color: white; padding: 10px 15px; border-radius: 10px; font-weight: bold; cursor: pointer; white-space: nowrap; }
 
-        .container {
-            width: 90%;
-            max-width: 450px;
-            background: var(--card-bg);
-            padding: 25px;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            margin-top: 20px;
-            text-align: center;
-        }
+        /* Results & Video */
+        .preview-box { width: 100%; border-radius: 15px; overflow: hidden; margin-top: 20px; display: none; }
+        video { width: 100%; background: #000; display: block; }
+        .dl-btn { display: block; background: #252a34; color: white; text-decoration: none; padding: 15px; border-radius: 12px; margin-top: 10px; border: 1px solid #444; font-weight: bold; }
 
-        h1 { font-size: 28px; margin-bottom: 25px; }
+        /* Reset / Another Video */
+        #resetArea { display: none; margin-top: 20px; }
+        .btn-reset { background: none; border: 1px solid #333; color: #888; padding: 8px 15px; border-radius: 8px; cursor: pointer; font-size: 12px; }
 
-        .input-group {
-            background: #252932;
-            padding: 5px;
-            border-radius: 12px;
-            display: flex;
-            margin-bottom: 20px;
-        }
+        /* Steps Section - Guaranteed Visibility */
+        .steps { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 40px; width: 100%; }
+        .step { background: var(--card); padding: 15px; border-radius: 18px; font-size: 11px; text-align: center; color: #aaa; border: 1px solid #222; }
+        .step i { color: var(--blue); margin-bottom: 10px; font-size: 20px; display: block; }
 
-        input {
-            flex: 1;
-            background: transparent;
-            border: none;
-            color: white;
-            padding: 12px;
-            outline: none;
-        }
+        /* Footer & Social */
+        .footer { margin-top: auto; padding: 40px 20px; text-align: center; width: 100%; border-top: 1px solid #222; }
+        .socials { display: flex; justify-content: center; gap: 20px; margin-bottom: 15px; }
+        .socials a { color: #666; font-size: 22px; transition: 0.3s; }
+        .socials a:hover { color: var(--blue); }
 
-        .btn-main {
-            background: var(--primary-blue);
-            border: none;
-            color: white;
-            padding: 10px 25px;
-            border-radius: 10px;
-            cursor: pointer;
-            font-weight: bold;
-        }
-
-        #results { margin-top: 20px; }
-
-        .download-btn {
-            display: block;
-            background: #252932;
-            color: white;
-            text-decoration: none;
-            padding: 15px;
-            margin: 10px 0;
-            border-radius: 10px;
-            transition: 0.3s;
-            border: 1px solid #333;
-        }
-
-        .download-btn:hover { background: #303642; }
-
-        .thumbnail {
-            width: 100%;
-            border-radius: 15px;
-            margin-bottom: 15px;
-        }
-
-        .how-to {
-            margin-top: 40px;
-            width: 90%;
-            max-width: 800px;
-        }
-
-        .grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 15px;
-            margin-top: 20px;
-        }
-
-        .step-card {
-            background: var(--card-bg);
-            padding: 15px;
-            border-radius: 15px;
-            text-align: center;
-            font-size: 12px;
-        }
-
-        .loader {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid var(--primary-blue);
-            border-radius: 50%;
-            width: 30px;
-            height: 30px;
-            animation: spin 1s linear infinite;
-            display: none;
-            margin: 10px auto;
-        }
-
+        .loader { display: none; margin: 20px auto; border: 3px solid #333; border-top: 3px solid var(--blue); border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <div class="logo">Yasing</div>
-        <i class="fas fa-bars"></i>
+    <div class="nav">
+        <a href="/" class="logo">YasinG</a>
+        <div class="nav-links">
+            <a href="#">ዜናዎች</a>
+            <a href="#">ጥያቄዎች</a>
+        </div>
     </div>
 
-    <div class="container">
-        <h1>ቪዲዮ ማውረጃ</h1>
-        
-        <div class="input-group">
-            <input type="text" id="urlInput" placeholder="ሊንኩን እዚህ ያስገቡ...">
-            <button class="btn-main" onclick="getDownloadLinks()">ለጥፍ</button>
+    <div class="wrapper">
+        <div class="container">
+            <div class="main-card">
+                <h2 style="font-size: 24px; margin-top: 0;">ቪዲዮ ማውረጃ</h2>
+                
+                <div class="input-box">
+                    <input type="text" id="urlInput" placeholder="ሊንኩን እዚህ ያስገቡ..." onfocus="handleAutoPaste()">
+                    <button class="btn-search" onclick="startDownload()">አውርድ</button>
+                </div>
+
+                <div id="loader" class="loader"></div>
+
+                <div id="previewBox" class="preview-box">
+                    <video id="videoPlayer" controls></video>
+                </div>
+
+                <div id="results"></div>
+
+                <div id="resetArea">
+                    <button class="btn-reset" onclick="location.reload()">🔄 ሌላ ቪዲዮ አውርድ</button>
+                </div>
+            </div>
+
+            <div class="steps">
+                <div class="step"><i class="fas fa-link"></i>ሊንክ ኮፒ</div>
+                <div class="step"><i class="fas fa-paste"></i>እዚህ ለጥፍ</div>
+                <div class="step"><i class="fas fa-download"></i>ቪዲዮውን አውርድ</div>
+            </div>
         </div>
 
-        <div id="loader" class="loader"></div>
-        <div id="results"></div>
-    </div>
-
-    <div class="how-to">
-        <h2 style="text-align: center;">እንዴት ማውረድ ይቻላል?</h2>
-        <div class="grid">
-            <div class="step-card">
-                <i class="fas fa-link" style="color:var(--primary-blue); font-size: 20px;"></i>
-                <p>1. ሊንኩን ኮፒ አድርጉ</p>
+        <div class="footer">
+            <div class="socials">
+                <a href="#"><i class="fab fa-facebook"></i></a>
+                <a href="#"><i class="fab fa-telegram"></i></a>
+                <a href="#"><i class="fab fa-tiktok"></i></a>
+                <a href="#"><i class="fab fa-youtube"></i></a>
             </div>
-            <div class="step-card">
-                <i class="fas fa-paste" style="color:var(--primary-blue); font-size: 20px;"></i>
-                <p>2. እዚህ ይለጥፉ</p>
-            </div>
-            <div class="step-card">
-                <i class="fas fa-download" style="color:var(--primary-blue); font-size: 20px;"></i>
-                <p>3. ያውርዱ</p>
-            </div>
+            <p style="font-size: 11px; color: #444;">© 2026 YasinG Downloader. All rights reserved.</p>
         </div>
     </div>
 
     <script>
-        async function getDownloadLinks() {
-            const url = document.getElementById('urlInput').value;
-            const resultsDiv = document.getElementById('results');
-            const loader = document.getElementById('loader');
-
-            if (!url) {
-                alert("እባክዎ ሊንክ ያስገቡ!");
-                return;
+        // Auto-paste logic when clicking the input box
+        async function handleAutoPaste() {
+            const input = document.getElementById('urlInput');
+            if (!input.value) {
+                try {
+                    const text = await navigator.clipboard.readText();
+                    if (text.includes('http')) {
+                        input.value = text;
+                    }
+                } catch (err) {}
             }
+        }
 
-            resultsDiv.innerHTML = "";
+        async function startDownload() {
+            const url = document.getElementById('urlInput').value;
+            const results = document.getElementById('results');
+            const loader = document.getElementById('loader');
+            const preview = document.getElementById('previewBox');
+            const player = document.getElementById('videoPlayer');
+            const resetArea = document.getElementById('resetArea');
+
+            if (!url) return;
+
             loader.style.display = "block";
+            results.innerHTML = "";
+            preview.style.display = "none";
+            resetArea.style.display = "none";
 
             try {
-                // Vercel relative path
-                const response = await fetch(`/info?url=${encodeURIComponent(url)}`);
-                const data = await response.json();
-
+                const res = await fetch(`/api/info?url=${encodeURIComponent(url)}`);
+                const data = await res.json();
                 loader.style.display = "none";
 
                 if (data.error) {
-                    resultsDiv.innerHTML = `<p style="color:red">ስህተት ተከስቷል: ${data.error}</p>`;
+                    results.innerHTML = `<p style="color:red; font-size:13px;">${data.error}</p>`;
                     return;
                 }
 
-                let html = `
-                    <img src="${data.thumbnail}" class="thumbnail">
-                    <p style="font-size:14px; margin-bottom:15px;">${data.title}</p>
-                `;
+                // Setup Preview
+                preview.style.display = "block";
+                player.src = data.formats[0].url;
+                player.poster = data.thumbnail;
 
+                // Build Download Buttons
+                let html = `<p style="margin:15px 0; font-size:12px; color:#888;">${data.title}</p>`;
                 data.formats.forEach(f => {
-                    // This matches the 'quality_label' from our api/index.py
-                    html += `
-                        <a href="${f.direct_url}" target="_blank" class="download-btn">
-                            🎬 ${f.quality_label} አውርድ
-                        </a>
-                    `;
+                    html += `<a href="${f.url}" target="_blank" class="dl-btn">🎬 ${f.quality} አውርድ</a>`;
                 });
-
-                resultsDiv.innerHTML = html;
+                
+                results.innerHTML = html;
+                resetArea.style.display = "block";
 
             } catch (err) {
                 loader.style.display = "none";
-                resultsDiv.innerHTML = "<p style='color:red'>ከሰርቨሩ ጋር መገናኘት አልተቻለም።</p>";
+                results.innerHTML = "Error: Could not connect to server.";
             }
         }
     </script>
