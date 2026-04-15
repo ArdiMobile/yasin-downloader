@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YasinG - High Speed Downloader</title>
+    <title>YasinG - Facebook Video Downloader</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { --blue: #2d6df6; --dark: #1a1d23; --bg: #f8f9fa; --text: #333; }
@@ -16,67 +16,57 @@
             position: sticky; top: 0; z-index: 2000;
         }
         .logo { font-size: 26px; font-weight: 900; color: var(--blue); text-decoration: none; }
-        .nav-links { display: flex; gap: 25px; margin-left: auto; }
+        .nav-links { display: flex; gap: 30px; margin-left: auto; }
         .nav-links a { text-decoration: none; color: #444; font-size: 14px; font-weight: 600; }
 
-        /* --- 2. HERO SECTION (SPLIT) --- */
+        /* --- 2. HERO SECTION (SPLIT LAYOUT) --- */
         .hero { 
-            background: var(--dark); color: white; padding: 60px 8%; 
-            display: flex; align-items: center; gap: 40px; min-height: 400px;
+            background: var(--dark); color: white; padding: 80px 8%; 
+            display: flex; align-items: center; justify-content: space-between; gap: 50px;
         }
-        .hero-content { flex: 1.2; }
-        .hero-content h1 { font-size: 38px; margin-bottom: 15px; font-weight: 800; }
-        .hero-image { flex: 0.8; text-align: center; }
-        .hero-image img { max-width: 100%; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .hero-content { flex: 1; text-align: left; }
+        .hero-content h1 { font-size: 42px; margin-bottom: 20px; font-weight: 800; line-height: 1.2; }
+        .hero-image { flex: 1; display: flex; justify-content: center; }
+        .hero-image img { max-width: 100%; border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
 
+        /* Fitted Downloader inside Hero */
         .search-area { 
-            max-width: 450px; display: flex; background: white; 
-            padding: 5px; border-radius: 50px; align-items: center; margin-top: 25px;
+            max-width: 500px; display: flex; background: white; 
+            padding: 5px; border-radius: 50px; align-items: center; margin-top: 30px;
         }
-        .search-area input { flex: 1; border: none; padding: 12px 18px; outline: none; border-radius: 50px; color: #333; }
-        .btn-dl { background: var(--blue); color: white; border: none; width: 45px; height: 45px; border-radius: 50%; cursor: pointer; margin-right: 2px; }
+        .search-area input { flex: 1; border: none; padding: 12px 20px; outline: none; font-size: 16px; border-radius: 50px; color: #333; }
+        .btn-dl { background: var(--blue); color: white; border: none; width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; margin-right: 2px; }
 
-        /* --- 3. STEPS GRID (Horizontal) --- */
-        .section-title { text-align: center; margin: 60px 0 30px; font-size: 26px; font-weight: 800; }
-        .steps-grid { 
-            display: grid; grid-template-columns: repeat(3, 1fr); 
-            gap: 20px; padding: 0 8% 60px; 
-        }
-        .step-card { background: #fafafa; padding: 25px; border-radius: 15px; border: 1px solid #eee; text-align: center; }
-        .step-card i { font-size: 30px; color: var(--blue); margin-bottom: 15px; }
-        .step-card h4 { margin: 10px 0; }
+        /* --- 3. NEWS-STYLE UPDATES --- */
+        .section { padding: 80px 8%; text-align: center; }
+        .updates-container { max-width: 700px; margin: 0 auto; text-align: left; }
+        .news-card { background: white; border: 1px solid #eee; border-radius: 15px; overflow: hidden; display: flex; gap: 20px; padding: 15px; align-items: center; margin-bottom: 20px; }
+        .news-img { width: 120px; height: 120px; border-radius: 10px; object-fit: cover; background: #eee; flex-shrink: 0; }
+        .news-text h4 { margin: 0 0 10px 0; color: var(--blue); }
+        .news-text p { margin: 0; font-size: 14px; color: #666; line-height: 1.5; }
 
-        /* --- 4. SIDE-BY-SIDE GRID (Updates & FAQ) --- */
-        .main-grid { 
-            display: grid; grid-template-columns: 1.2fr 1fr; 
-            gap: 40px; padding: 60px 8%; background: #fcfcfc; border-top: 1px solid #f0f0f0;
-        }
-        
-        /* News Style */
-        .news-card { background: white; border: 1px solid #eee; border-radius: 12px; display: flex; gap: 15px; padding: 12px; margin-bottom: 15px; align-items: center; }
-        .news-img { width: 80px; height: 80px; border-radius: 8px; background: #eee; object-fit: cover; }
-        .news-text h4 { margin: 0 0 5px; font-size: 16px; color: var(--blue); }
-        .news-text p { margin: 0; font-size: 13px; color: #666; }
-
-        /* FAQ Style */
-        .faq-item { background: white; border: 1px solid #eee; border-radius: 10px; margin-bottom: 10px; padding: 15px; cursor: pointer; }
-        .faq-item h4 { margin: 0; display: flex; justify-content: space-between; font-size: 15px; }
-        .faq-answer { max-height: 0; overflow: hidden; transition: 0.3s ease; color: #777; font-size: 13px; line-height: 1.5; }
-        .faq-item.active .faq-answer { max-height: 100px; margin-top: 10px; }
+        /* --- 4. STEPS & FAQ --- */
+        .steps-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 40px; }
+        .step-box { background: #fafafa; padding: 30px; border-radius: 20px; border: 1px solid #eee; }
+        .faq-item { border-bottom: 1px solid #eee; padding: 20px 0; cursor: pointer; text-align: left; }
+        .faq-answer { max-height: 0; overflow: hidden; transition: 0.3s ease; color: #666; }
+        .faq-item.active .faq-answer { max-height: 200px; margin-top: 10px; }
 
         /* --- 5. FOOTER WITH FOLLOWERS --- */
-        .footer { background: #0b0d11; color: white; padding: 50px 8% 20px; }
-        .footer-flex { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 30px; }
-        .social-follow { display: flex; gap: 15px; margin-top: 15px; }
-        .follow-btn { text-decoration: none; color: white; display: flex; align-items: center; gap: 10px; background: #1a1d23; padding: 10px; border-radius: 8px; border: 1px solid #333; font-size: 13px; }
-        .follow-btn i { color: var(--blue); font-size: 18px; }
-        .stats { font-size: 11px; color: #888; display: block; }
+        .footer { background: #0b0d11; color: white; padding: 60px 8% 30px; }
+        .footer-grid { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 40px; }
+        .social-follow { display: flex; gap: 20px; margin-top: 20px; }
+        .follow-btn { text-decoration: none; color: white; display: flex; align-items: center; gap: 10px; background: #1a1d23; padding: 10px 15px; border-radius: 10px; border: 1px solid #333; transition: 0.3s; }
+        .follow-btn:hover { border-color: var(--blue); background: #222; }
+        .follow-btn i { font-size: 20px; color: var(--blue); }
+        .stats { font-size: 12px; color: #888; display: block; margin-top: 2px; }
 
-        /* RESPONSIVE */
         @media (max-width: 900px) {
-            .hero, .main-grid, .steps-grid { grid-template-columns: 1fr; flex-direction: column; }
-            .hero-image { display: none; }
-            .nav-links { display: none; }
+            .hero { flex-direction: column; text-align: center; }
+            .hero-content { text-align: center; }
+            .search-area { margin: 30px auto 0; }
+            .news-card { flex-direction: column; text-align: center; }
+            .news-img { width: 100%; height: 180px; }
         }
     </style>
 </head>
@@ -93,76 +83,76 @@
 
     <section class="hero">
         <div class="hero-content">
-            <h1>Download Facebook <br><span style="color:var(--blue)">Videos in Seconds</span></h1>
-            <p style="opacity:0.8">ጥራት ያላቸው ቪዲዮዎችን በቀላሉ ለማውረድ የሚያግዝ ምርጥ ድህረ-ገጽ።</p>
+            <h1>Fast & Secure <br><span style="color:var(--blue)">Video Downloader</span></h1>
+            <p style="opacity:0.8">ማንኛውንም የፌስቡክ ቪዲዮዎችን በከፍተኛ ጥራት እና በፍጥነት ያውርዱ።</p>
             <div class="search-area">
-                <input type="text" id="urlInput" placeholder="ቪዲዮ ሊንክ እዚህ ያስገቡ...">
+                <input type="text" id="urlInput" placeholder="ሊንኩን እዚህ ያስገቡ...">
                 <button class="btn-dl"><i class="fas fa-download"></i></button>
             </div>
         </div>
         <div class="hero-image">
-            <img src="https://via.placeholder.com/400x250/2d6df6/ffffff?text=Video+Interface" alt="Preview">
+            <img src="https://via.placeholder.com/500x350/2d6df6/ffffff?text=Video+Preview" alt="Hero Image">
         </div>
     </section>
 
-    <h2 class="section-title" id="how">እንዴት ማውረድ ይቻላል?</h2>
-    <div class="steps-grid">
-        <div class="step-card"><i class="fas fa-link"></i><h4>1. ኮፒ</h4><p>ቪዲዮ ሊንኩን ይያዙ</p></div>
-        <div class="step-card"><i class="fas fa-paste"></i><h4>2. ፔስት</h4><p>እዚህ ጋር ይለጥፉ</p></div>
-        <div class="step-card"><i class="fas fa-download"></i><h4>3. ዳውንሎድ</h4><p>ጥራቱን መርጠው ያውርዱ</p></div>
-    </div>
-
-    <div class="main-grid">
-        <div id="updates">
-            <h3 style="margin-top:0">የቅርብ ጊዜ ዜናዎች</h3>
+    <section class="section" id="updates" style="background:#fafafa;">
+        <h2 style="margin-bottom:40px;">የቅርብ ጊዜ ዜናዎች</h2>
+        <div class="updates-container">
             <div class="news-card">
-                <img src="https://via.placeholder.com/80" class="news-img">
+                <img src="https://via.placeholder.com/150" class="news-img" alt="News">
                 <div class="news-text">
-                    <h4>Reels Support Live</h4>
-                    <p>አሁን ሪልስ ቪዲዮዎችን ማውረድ ይቻላል።</p>
+                    <h4>Reels Support is Live!</h4>
+                    <p>አሁን የፌስቡክ ሪልስ (Reels) ቪዲዮዎችን በቀላሉ ማውረድ የሚያስችል አዲስ ሲስተም ተዘርግቷል።</p>
                 </div>
             </div>
             <div class="news-card">
-                <img src="https://via.placeholder.com/80" class="news-img">
+                <img src="https://via.placeholder.com/150" class="news-img" alt="News">
                 <div class="news-text">
-                    <h4>Ultra-Fast Servers</h4>
-                    <p>አዳዲስ ሰርቨሮች ስራ ጀምረዋል።</p>
+                    <h4>Server Speed Boost</h4>
+                    <p>የማውረድ ፍጥነታችንን በ 200% የሚያሳድጉ አዳዲስ ሰርቨሮች በዛሬው እለት ስራ ጀምረዋል።</p>
                 </div>
             </div>
         </div>
+    </section>
 
-        <div id="faq">
-            <h3 style="margin-top:0">ጥያቄዎች</h3>
+    <section class="section" id="faq">
+        <h2>ተደጋጋሚ ጥያቄዎች</h2>
+        <div style="max-width:800px; margin:0 auto;">
             <div class="faq-item" onclick="this.classList.toggle('active')">
                 <h4>አገልግሎቱ ነፃ ነው? <i class="fas fa-plus"></i></h4>
-                <div class="faq-answer">አዎ! ምንም አይነት ክፍያ አይጠበቅብዎትም።</div>
+                <div class="faq-answer"><p>አዎ! Yasingን ለመጠቀም ምንም አይነት ክፍያ አይጠበቅብዎትም::</p></div>
             </div>
             <div class="faq-item" onclick="this.classList.toggle('active')">
-                <h4>የት ነው የሚቀመጠው? <i class="fas fa-plus"></i></h4>
-                <div class="faq-answer">በስልክዎ የዳውንሎድ ፎልደር ውስጥ ይገኛል።</div>
+                <h4>ቪዲዮው የት ነው የሚቀመጠው? <i class="fas fa-plus"></i></h4>
+                <div class="faq-answer"><p>ብዙውን ጊዜ በስልክዎ 'Downloads' ፎልደር ውስጥ ይቀመጣል።</p></div>
             </div>
         </div>
-    </div>
+    </section>
 
     <footer class="footer">
-        <div class="footer-flex">
+        <div class="footer-grid">
             <div>
                 <h3 style="color:var(--blue); margin:0;">YasinG</h3>
-                <p style="color:#555; font-size:12px; margin-top:5px;">Social Media Downloader</p>
+                <p style="color:#666; font-size:13px; max-width:300px; margin-top:10px;">The best social media downloader in Ethiopia.</p>
             </div>
             <div>
-                <h4 style="margin:0">Follow Us</h4>
+                <h4>Follow Us</h4>
                 <div class="social-follow">
-                    <a href="#" class="follow-btn"><i class="fab fa-telegram"></i><div>Telegram<span class="stats">12K Fans</span></div></a>
-                    <a href="#" class="follow-btn"><i class="fab fa-facebook"></i><div>Facebook<span class="stats">25K Fans</span></div></a>
+                    <a href="#" class="follow-btn">
+                        <i class="fab fa-telegram"></i>
+                        <div>Telegram<span class="stats">12K Followers</span></div>
+                    </a>
+                    <a href="#" class="follow-btn">
+                        <i class="fab fa-facebook"></i>
+                        <div>Facebook<span class="stats">25K Followers</span></div>
+                    </a>
                 </div>
             </div>
         </div>
-        <p style="text-align:center; font-size:10px; color:#333; margin-top:30px; border-top:1px solid #1a1d23; padding-top:15px;">© 2026 YasinG Downloader.</p>
+        <p style="text-align:center; margin-top:50px; color:#444; font-size:11px; border-top:1px solid #1a1d23; padding-top:20px;">
+            © 2026 YasinG Downloader. All rights reserved.
+        </p>
     </footer>
 
-    <script>
-        // No extra JS needed for layout
-    </script>
 </body>
 </html>
