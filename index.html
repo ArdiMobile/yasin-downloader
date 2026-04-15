@@ -3,230 +3,102 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Yasing - Pro Video Downloader</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Yasing - Video Downloader</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        html, body { min-height: 100vh; scroll-behavior: smooth; }
-        .hero-bg {
-            background: linear-gradient(rgba(9, 9, 11, 0.8), rgba(9, 9, 11, 0.9)), 
-                        url('https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&q=80&w=2000');
-            background-size: cover; background-position: center; background-attachment: fixed;
-        }
-        .loader { border-top-color: #3b82f6; animation: spinner 1.5s linear infinite; }
-        @keyframes spinner { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        #mobile-menu { position: fixed; top: 72px; left: 0; width: 100%; z-index: 100; }
+        :root { --blue: #2d6df6; --bg: #0b0d11; --card: #16191f; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: white; margin: 0; }
+        .nav { display: flex; justify-content: space-between; padding: 20px; align-items: center; border-bottom: 1px solid #222; }
+        .logo { color: var(--blue); font-weight: 900; font-size: 22px; }
+        .container { max-width: 450px; margin: 20px auto; padding: 20px; }
+        .main-card { background: var(--card); border-radius: 24px; padding: 30px; text-align: center; border: 1px solid #222; }
+        .input-box { background: #1e222a; border-radius: 14px; display: flex; padding: 5px; margin: 25px 0; border: 1px solid #333; }
+        input { flex: 1; background: transparent; border: none; color: white; padding: 12px; outline: none; width: 100%; }
+        .btn-paste { background: var(--blue); border: none; color: white; padding: 10px 20px; border-radius: 10px; font-weight: bold; cursor: pointer; }
+        .loader { display: none; margin: 20px auto; border: 3px solid #333; border-top: 3px solid var(--blue); border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .preview-box { width: 100%; border-radius: 15px; overflow: hidden; margin-bottom: 20px; display: none; }
+        video { width: 100%; background: #000; }
+        .dl-btn { display: block; background: #252a34; color: white; text-decoration: none; padding: 15px; border-radius: 12px; margin-bottom: 10px; border: 1px solid #444; font-weight: bold; }
+        .steps { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 40px; }
+        .step { background: var(--card); padding: 15px; border-radius: 15px; font-size: 11px; text-align: center; color: #aaa; }
+        .footer { text-align: center; margin-top: 50px; padding: 30px; color: #555; font-size: 12px; }
     </style>
 </head>
-<body class="bg-zinc-950 text-white font-sans">
+<body>
+    <div class="nav">
+        <div class="logo">YasinG</div>
+        <div style="font-size: 12px; color: #888;">እንዴት እንደሚሰራ | ዜናዎች</div>
+    </div>
 
-    <nav class="p-4 border-b border-zinc-800 bg-zinc-900/95 sticky top-0 z-[110] backdrop-blur-md">
-        <div class="max-w-6xl mx-auto flex justify-between items-center">
-            <h1 class="text-3xl font-black text-blue-500 italic"><i class="fab fa-facebook-f"></i> YasinG</h1>
-            <div class="hidden md:flex flex-1 justify-end space-x-8 text-sm font-bold text-zinc-400">
-                <a href="#steps" class="hover:text-white transition">እንዴት እንደሚሰራ</a>
-                <a href="#news" class="hover:text-white transition">ዜናዎች</a>
-                <a href="#faq" class="hover:text-white transition">ጥያቄዎች</a>
+    <div class="container">
+        <div class="main-card">
+            <h2>ቪዲዮ ማውረጃ</h2>
+            <div class="input-box">
+                <input type="text" id="urlInput" placeholder="ሊንኩን እዚህ ያስገቡ...">
+                <button class="btn-paste" onclick="handleAction()">ለጥፍ</button>
             </div>
-            <button onclick="toggleMenu()" class="md:hidden text-zinc-400 text-2xl"><i class="fas fa-bars"></i></button>
+            <div id="loader" class="loader"></div>
+            <div id="previewBox" class="preview-box">
+                <video id="videoPlayer" controls></video>
+            </div>
+            <div id="results"></div>
         </div>
-        <div id="mobile-menu" class="hidden flex flex-col p-6 space-y-4 bg-zinc-900 border-b border-zinc-800 text-right font-bold">
-            <a href="#steps" onclick="toggleMenu()">እንዴት እንደሚሰራ</a>
-            <a href="#news" onclick="toggleMenu()">ዜናዎች</a>
-            <a href="#faq" onclick="toggleMenu()">ጥያቄዎች</a>
-        </div>
-    </nav>
 
-    <section class="hero-bg py-20 px-6">
-        <div class="max-w-2xl mx-auto bg-zinc-900/90 p-8 md:p-12 rounded-[2.5rem] border border-zinc-800 shadow-2xl backdrop-blur-xl">
-            <h2 class="text-3xl font-black mb-10 text-center italic">ቪዲዮ ማውረጃ</h2>
-            <div class="relative mb-6">
-                <input type="text" id="url-input" placeholder="ሊንኩን እዚህ ይለጥፉ..." 
-                       class="w-full bg-zinc-950/50 p-6 pr-28 rounded-2xl outline-none border border-zinc-700 focus:ring-2 focus:ring-blue-600 transition-all">
-                <button onclick="pasteLink()" class="absolute right-3 top-3 bg-blue-600 px-6 py-3 rounded-xl font-black text-sm active:scale-95 transition-all">ለጥፍ</button>
-            </div>
-            <button onclick="getFormats()" id="main-btn" class="w-full bg-blue-600 p-6 rounded-2xl font-black text-xl flex items-center justify-center gap-3 active:scale-95 transition-all">
-                <span>ጥራት ይምረጡ</span> <i class="fas fa-bolt text-yellow-400"></i>
-            </button>
-            <div id="loading-spinner" class="hidden py-10 flex flex-col items-center">
-                <div class="loader rounded-full border-4 border-t-4 border-zinc-800 h-14 w-14 mb-4"></div>
-                <p class="text-blue-400 font-black animate-pulse">በመፈለግ ላይ...</p>
-            </div>
-            <div id="quality-list" class="mt-8 space-y-4"></div>
-            <div id="action-buttons" class="hidden mt-6">
-                <button onclick="resetDownloader()" class="w-full bg-zinc-800 p-5 rounded-2xl font-bold border border-zinc-700 flex items-center justify-center gap-2 hover:bg-zinc-700">
-                    <i class="fas fa-redo"></i> ሌላ ቪዲዮ አውርድ
-                </button>
-            </div>
+        <div class="steps">
+            <div class="step"><i class="fas fa-link"></i><br>ኮፒ</div>
+            <div class="step"><i class="fas fa-paste"></i><br>ለጥፍ</div>
+            <div class="step"><i class="fas fa-download"></i><br>አውርድ</div>
         </div>
-    </section>
+    </div>
 
-    <section id="steps" class="py-24 px-6 bg-zinc-950 border-t border-zinc-900">
-        <div class="max-w-6xl mx-auto text-center">
-            <h3 class="text-3xl font-black mb-16 italic">እንዴት ማውረድ ይቻላል?</h3>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div class="bg-zinc-900 p-8 rounded-3xl border border-zinc-800 hover:border-blue-600/50 transition-all text-center">
-                    <i class="fas fa-link text-blue-500 text-3xl mb-4"></i>
-                    <h4 class="font-bold mb-2">1. ሊንክ ይቅዱ</h4>
-                    <p class="text-zinc-500 text-sm">የቪዲዮውን ሊንክ ከፌስቡክ ወይም ቲክቶክ ይቅዱ።</p>
-                </div>
-                <div class="bg-zinc-900 p-8 rounded-3xl border border-zinc-800 text-center">
-                    <i class="fas fa-paste text-blue-500 text-3xl mb-4"></i>
-                    <h4 class="font-bold mb-2">2. እዚህ ይለጥፉ</h4>
-                    <p class="text-zinc-500 text-sm">ሊንኩን ከላይ ባለው ሳጥን ውስጥ 'ለጥፍ' የሚለውን በመጫን ያስገቡ።</p>
-                </div>
-                <div class="bg-zinc-900 p-8 rounded-3xl border border-zinc-800 text-center">
-                    <i class="fas fa-download text-blue-500 text-3xl mb-4"></i>
-                    <h4 class="font-bold mb-2">3. ያውርዱ</h4>
-                    <p class="text-zinc-500 text-sm">የሚፈልጉትን ጥራት ይምረጡና ቪዲዮውን ያውርዱ።</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="news" class="py-20 px-6 bg-zinc-900/30">
-        <div class="max-w-4xl mx-auto">
-            <h3 class="text-xl font-bold mb-6 italic text-blue-500 uppercase">ዜናዎች</h3>
-            <div class="bg-zinc-900 p-6 rounded-3xl border border-zinc-800 flex items-center gap-6">
-                <div class="text-blue-500 text-3xl"><i class="fas fa-rocket"></i></div>
-                <p class="text-zinc-400 text-sm">V2.5 Update: ቪዲዮዎችን በከፍተኛ ፍጥነት የሚያወርዱ አዳዲስ ሰርቨሮች ተጨምረዋል።</p>
-            </div>
-          <div class="bg-zinc-900 p-6 rounded-3xl border border-zinc-800 flex items-center gap-6">
-                <div class="text-blue-500 text-3xl"><i class="fas fa-signal"></i></div>
-                <p class="text-zinc-400 text-sm">Facebook Update: ቪዲዮዎችን በከፍተኛ ፍጥነት የሚያወርዱ አዳዲስ ሰርቨሮች ተጨምረዋል።</p>
-            </div>
-        </div>
-    </section>
-
-    <section id="faq" class="py-24 px-6 bg-zinc-950 border-t border-zinc-800">
-        <div class="max-w-6xl mx-auto">
-            <h3 class="text-3xl font-black mb-12 italic text-blue-500 text-left">ተደጋጋሚ ጥያቄዎች</h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="bg-zinc-900 rounded-3xl p-8 border border-zinc-800">
-                    <h4 class="font-bold mb-3 text-blue-400">ቪዲዮ ለማውረድ መክፈል ያስፈልጋል?</h4>
-                    <p class="text-zinc-500 text-sm leading-relaxed">አይ፣ Yasing ሙሉ በሙሉ ነፃ አገልግሎት ነው። ምንም አይነት ክፍያ ወይም አካውንት መክፈት አይጠበቅብዎትም።</p>
-                </div>
-                <div class="bg-zinc-900 rounded-3xl p-8 border border-zinc-800">
-                    <h4 class="font-bold mb-3 text-blue-400">ቪዲዮው የት ነው የሚቀመጠው?</h4>
-                    <p class="text-zinc-500 text-sm leading-relaxed">አብዛኛውን ጊዜ በስልክዎ ወይም በኮምፒውተርዎ 'Downloads' ፎልደር ውስጥ በቀጥታ ይቀመጣል።</p>
-                </div>
-                <div class="bg-zinc-900 rounded-3xl p-8 border border-zinc-800">
-                    <h4 class="font-bold mb-3 text-blue-400">ደህንነቱ የተጠበቀ ነው?</h4>
-                    <p class="text-zinc-500 text-sm leading-relaxed">አዎ፣ ምንም አይነት ቫይረስ ወይም አላስፈላጊ ማስታወቂያ የሌለው አስተማማኝ ሶፍትዌር ነው።</p>
-                </div>
-                <div class="bg-zinc-900 rounded-3xl p-8 border border-zinc-800">
-                    <h4 class="font-bold mb-3 text-blue-400">ቲክቶክ ይደግፋል?</h4>
-                    <p class="text-zinc-500 text-sm leading-relaxed">አዎ፣ ፌስቡክን ጨምሮ የተለያዩ የማህበራዊ ገጾችን ቪዲዮዎችን ማውረድ ይቻላል።</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <footer class="py-16 px-6 bg-zinc-900 border-t border-zinc-800">
-        <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-10">
-            <div class="text-center md:text-left">
-                <h1 class="text-3xl font-black text-blue-500 italic">Yasing</h1>
-                <p class="text-zinc-600 text-[10px] uppercase font-black tracking-widest mt-2 mb-6">© 2026 Yasing.com.et | Ethiopia</p>
-                
-                <div class="flex justify-center md:justify-start gap-4">
-                    <a href="#" class="w-10 h-10 bg-zinc-800 rounded-full flex items-center justify-center hover:bg-sky-600 transition-all text-sky-400 hover:text-white">
-                        <i class="fab fa-telegram-plane"></i>
-                    </a>
-                    <a href="#" class="w-10 h-10 bg-zinc-800 rounded-full flex items-center justify-center hover:bg-blue-600 transition-all text-blue-500 hover:text-white">
-                        <i class="fab fa-facebook-f"></i>
-                    </a>
-                    <a href="#" class="w-10 h-10 bg-zinc-800 rounded-full flex items-center justify-center hover:bg-pink-600 transition-all text-pink-500 hover:text-white">
-                        <i class="fab fa-instagram"></i>
-                    </a>
-                </div>
-            </div>
-
-            <div class="flex flex-col items-center md:items-end gap-4">
-                <div class="flex gap-8 text-zinc-500 text-xs font-bold uppercase">
-                    <a href="#" class="hover:text-white transition">Privacy</a>
-                    <a href="#" class="hover:text-white transition">Terms</a>
-                    <a href="#" class="hover:text-white transition">Contact</a>
-                </div>
-                <p class="text-zinc-700 text-[9px] font-bold">POWERED BY ETHIOPIAN TALENT</p>
-            </div>
-        </div>
-    </footer>
+    <div class="footer">© 2026 YasinG Downloader. All rights reserved.</div>
 
     <script>
-        function toggleMenu() { document.getElementById('mobile-menu').classList.toggle('hidden'); }
-
-        async function pasteLink() {
+        async function handleAction() {
             try {
                 const text = await navigator.clipboard.readText();
-                document.getElementById('url-input').value = text;
-            } catch (err) { alert("ሊንኩን ኮፒ ያድርጉ!"); }
+                if(text) document.getElementById('urlInput').value = text;
+            } catch (e) {}
+            startDownload();
         }
 
-        async function getFormats() {
-            const urlInput = document.getElementById('url-input').value;
-            const list = document.getElementById('quality-list');
-            const btn = document.getElementById('main-btn');
-            const spin = document.getElementById('loading-spinner');
-            const actions = document.getElementById('action-buttons');
+        async function startDownload() {
+            const url = document.getElementById('urlInput').value;
+            const results = document.getElementById('results');
+            const loader = document.getElementById('loader');
+            const preview = document.getElementById('previewBox');
+            const player = document.getElementById('videoPlayer');
 
-            if (!urlInput) { alert("ሊንክ ያስገቡ!"); return; }
-
-            btn.classList.add('hidden');
-            spin.classList.remove('hidden');
-            list.innerHTML = "";
-            actions.classList.add('hidden');
+            if(!url) return;
+            loader.style.display = "block";
+            results.innerHTML = "";
+            preview.style.display = "none";
 
             try {
-                const response = await fetch(`/info?url=${encodeURIComponent(urlInput)}`);
-                const data = await response.json();
-                spin.classList.add('hidden');
+                // IMPORTANT: Matches the Python route /api/info
+                const res = await fetch(`/api/info?url=${encodeURIComponent(url)}`);
+                const data = await res.json();
+                loader.style.display = "none";
 
-                if (data.error) {
-                    btn.classList.remove('hidden');
-                    alert("ቪዲዮው አልተገኘም!");
+                if(data.error) {
+                    results.innerHTML = `<p style="color:red">${data.error}</p>`;
                     return;
                 }
 
-                if (data.thumbnail) {
-                    list.innerHTML = `
-                        <div class="rounded-3xl overflow-hidden border border-zinc-700 bg-zinc-800 mb-6 relative group">
-                            <div id="player-container" class="relative aspect-video">
-                                <img src="${data.thumbnail}" class="w-full h-full object-cover opacity-60">
-                                <button onclick="startPlayer('${data.formats[0].url}')" class="absolute inset-0 flex items-center justify-center">
-                                    <div class="w-20 h-20 bg-blue-600 rounded-full flex items-center justify-center shadow-2xl group-hover:scale-110 transition-transform">
-                                        <i class="fas fa-play text-2xl ml-1 text-white"></i>
-                                    </div>
-                                </button>
-                            </div>
-                            <div class="p-4 text-xs font-bold text-zinc-400 text-center">${data.title}</div>
-                        </div>`;
-                }
+                preview.style.display = "block";
+                player.src = data.formats[0].url;
+                player.poster = data.thumbnail;
 
+                let html = `<p style="margin:15px 0; font-size:13px;">${data.title}</p>`;
                 data.formats.forEach(f => {
-                    list.innerHTML += `
-                        <a href="${f.url}" target="_blank" class="block w-full bg-blue-600/10 p-5 rounded-2xl border border-blue-600/20 hover:bg-blue-600 text-center font-black mb-3 transition-all text-white">
-                            🎬 ${f.quality} አውርድ
-                        </a>`;
+                    html += `<a href="${f.url}" target="_blank" class="dl-btn">🎬 ${f.quality} አውርድ</a>`;
                 });
-
-                actions.classList.remove('hidden');
-            } catch (error) {
-                spin.classList.add('hidden');
-                btn.classList.remove('hidden');
-                alert("የሰርቨር ስህተት!");
+                results.innerHTML = html;
+            } catch (err) {
+                loader.style.display = "none";
+                results.innerHTML = "Error connecting to server.";
             }
-        }
-
-        function startPlayer(url) {
-            const container = document.getElementById('player-container');
-            container.innerHTML = `<video src="${url}" controls autoplay class="w-full h-full object-contain bg-black"></video>`;
-        }
-
-        function resetDownloader() {
-            document.getElementById('url-input').value = "";
-            document.getElementById('quality-list').innerHTML = "";
-            document.getElementById('action-buttons').classList.add('hidden');
-            document.getElementById('main-btn').classList.remove('hidden');
         }
     </script>
 </body>
