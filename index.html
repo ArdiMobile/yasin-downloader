@@ -42,39 +42,51 @@
         <button onclick="location.reload()" style="margin-top:15px; cursor:pointer; border:none; background:none; color:gray;">Download Another</button>
     </div>
 
-    <script>
-        async function startDownload() {
-            const url = document.getElementById('urlInput').value;
-            const loader = document.getElementById('loader');
-            const resultArea = document.getElementById('resultArea');
+   
+        <script>
+    function toggleMenu() { document.getElementById('navLinks').classList.toggle('active'); }
+    function toggleFaq(el) { el.classList.toggle('active'); }
+
+    async function startDownload() {
+        const urlInput = document.getElementById('urlInput').value;
+        const loader = document.getElementById('loader');
+        const resultArea = document.getElementById('resultArea');
+        const dlLinks = document.getElementById('dlLinks');
+        const videoPlayer = document.getElementById('videoPlayer');
+
+        if (!urlInput) return alert("Please enter a link!");
+        
+        loader.style.display = "block";
+        resultArea.style.display = "none";
+
+        try {
+            const response = await fetch(`/info?url=${encodeURIComponent(urlInput)}`);
+            const data = await response.json();
+            loader.style.display = "none";
+
+            if (data.error) throw new Error(data.error);
+
+            resultArea.style.display = "block";
+            let html = `<h3>${data.title}</h3>`;
             
-            if(!url) { alert("Please enter a URL"); return; }
-            
-            loader.style.display = "block";
-            resultArea.style.display = "none";
-
-            try {
-                const response = await fetch(`/info?url=${encodeURIComponent(url)}`);
-                const data = await response.json();
-                loader.style.display = "none";
-
-                if (data.error) {
-                    alert("Error: " + data.error);
-                    return;
-                }
-
-                resultArea.style.display = "block";
-                document.getElementById('videoTitle').innerText = data.title;
-                document.getElementById('videoPlayer').src = data.video_url;
-                document.getElementById('dlLinks').innerHTML = `
-                    <a href="${data.video_url}" target="_blank" class="dl-btn-final">
-                        Download Video
+            data.formats.forEach(f => {
+                html += `
+                    <a href="${f.url}" target="_blank" download 
+                       style="display:block; background:#2d6df6; color:white; padding:12px; margin:10px 0; border-radius:50px; text-decoration:none; font-weight:bold;">
+                       Download ${f.quality} (.${f.ext})
                     </a>`;
-            } catch (e) {
-                loader.style.display = "none";
-                alert("Server connection failed.");
-            }
+            });
+
+            dlLinks.innerHTML = html;
+            if (data.formats.length > 0) videoPlayer.src = data.formats[0].url;
+            resultArea.scrollIntoView({ behavior: 'smooth' });
+
+        } catch (err) {
+            loader.style.display = "none";
+            alert("Error: " + err.message);
         }
+    }
+
     </script>
 </body>
 </html>
