@@ -218,19 +218,31 @@
             loader.style.display = "block";
             resultArea.style.display = "none";
 
-            try {
-                const res = await fetch(`/api/info?url=${encodeURIComponent(url)}`);
-                const data = await res.json();
-                loader.style.display = "none";
-                
-                if(data.error) { alert(data.error); return; }
-                
-                resultArea.style.display = "block";
-                document.getElementById('videoPlayer').src = data.formats[0].url;
-                let html = `<h4 style="margin:15px 0;">${data.title}</h4>`;
-                data.formats.forEach(f => {
-                    html += `<a href="${f.url}" target="_blank" style="display:block; background:var(--blue); color:white; text-decoration:none; padding:12px; border-radius:10px; margin-bottom:10px; font-weight:bold; text-align:center;">Download ${f.quality}</a>`;
-                });
+          async function getDownloadLinks() {
+    const url = document.getElementById('urlInput').value;
+    const resultsDiv = document.getElementById('results');
+    resultsDiv.innerHTML = "Fetching links...";
+
+    try {
+        // This points to your Vercel Python function
+        const response = await fetch(`/info?url=${encodeURIComponent(url)}`);
+        const data = await response.json();
+
+        if (data.error) {
+            resultsDiv.innerHTML = `<p style="color:red">Error: ${data.error}</p>`;
+            return;
+        }
+
+        // Logic to display your links...
+        resultsDiv.innerHTML = `<h3>${data.title}</h3>`;
+        data.formats.forEach(f => {
+            resultsDiv.innerHTML += `<a href="${f.url}" target="_blank">Download ${f.resolution} (.${f.extension})</a><br>`;
+        });
+
+    } catch (err) {
+        resultsDiv.innerHTML = "<p style='color:red'>Failed to connect to server.</p>";
+    }
+}
                 document.getElementById('dlLinks').innerHTML = html;
                 resultArea.scrollIntoView({ behavior: 'smooth' });
             } catch (e) { loader.style.display = "none"; alert("Error connecting to server."); }
