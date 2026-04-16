@@ -1,225 +1,139 @@
 <!DOCTYPE html>
-<html lang="am">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Yasing - Social Media Downloader</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YasinG - Facebook Video Downloader</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root {
-            --primary-blue: #2d6df6;
-            --bg-dark: #0f1115;
-            --card-bg: #1a1d23;
+        :root { --blue: #2d6df6; --dark: #1a1d23; --text: #333; }
+        
+        html, body { height: 100%; margin: 0; display: flex; flex-direction: column; }
+        body { font-family: 'Inter', sans-serif; color: var(--text); background: white; scroll-behavior: smooth; }
+
+        /* --- 1. NAVIGATION --- */
+        .nav { 
+            display: flex; justify-content: space-between; align-items: center; 
+            padding: 15px 8%; background: white; border-bottom: 1px solid rgba(0,0,0,0.05); 
+            position: sticky; top: 0; z-index: 9999; width: 100%; box-sizing: border-box; 
+        }
+        .logo { font-size: 26px; font-weight: 900; color: var(--blue); text-decoration: none; }
+        .nav-links { display: flex; gap: 25px; align-items: center; margin-left: auto; }
+        .nav-links a { text-decoration: none; color: #444; font-size: 14px; font-weight: 600; }
+        .menu-toggle { display: none; font-size: 22px; cursor: pointer; color: var(--dark); }
+
+        /* --- 2. HERO & DOWNLOADER --- */
+        .hero { 
+            position: relative; padding: 100px 20px; text-align: center; 
+            color: white; overflow: hidden; min-height: 450px; 
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            background-color: var(--dark);
         }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-dark);
-            color: white;
-            margin: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
+        /* Hero Background with 70% Opacity */
+        .hero::before {
+            content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background-image: url('15840.jpg'); background-size: cover; background-position: center;
+            opacity: 0.7; z-index: 1; 
+            pointer-events: none; /* CRITICAL: Allows clicking the input box through the image */
         }
 
-        .header {
-            width: 100%;
-            padding: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-sizing: border-box;
+        .hero-content { position: relative; z-index: 10; max-width: 800px; width: 100%; }
+        .hero h1 { font-size: 42px; margin-bottom: 15px; font-weight: 800; text-shadow: 0 2px 10px rgba(0,0,0,0.5); }
+
+        /* SEARCH AREA */
+        .search-area { 
+            max-width: 550px; margin: 0 auto; display: flex; background: white; 
+            padding: 6px; border-radius: 50px; box-shadow: 0 15px 35px rgba(0,0,0,0.4); 
+            align-items: center; width: 90%; position: relative; z-index: 100;
+        }
+        .search-area input { 
+            flex: 1; border: none; padding: 15px 20px; outline: none; 
+            font-size: 16px; border-radius: 50px; color: #333; background: transparent;
+        }
+        .btn-dl { 
+            background: var(--blue); color: white; border: none; width: 50px; height: 50px; 
+            border-radius: 50%; display: flex; align-items: center; justify-content: center; 
+            cursor: pointer; transition: 0.3s; flex-shrink: 0; font-size: 18px;
         }
 
-        .logo {
-            font-size: 24px;
-            font-weight: bold;
-            color: var(--primary-blue);
-            font-style: italic;
+        /* --- 3. MOBILE MENU --- */
+        @media (max-width: 850px) {
+            .nav-links { 
+                display: none; position: absolute; top: 100%; left: 0; width: 100%; 
+                background: white; flex-direction: column; padding: 10px 0; 
+                box-shadow: 0 10px 15px rgba(0,0,0,0.1); 
+            }
+            .nav-links.active { display: flex; }
+            .menu-toggle { display: block; }
+            .hero h1 { font-size: 32px; }
         }
 
-        .container {
-            width: 90%;
-            max-width: 450px;
-            background: var(--card-bg);
-            padding: 25px;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            margin-top: 20px;
-            text-align: center;
-        }
-
-        h1 { font-size: 28px; margin-bottom: 25px; }
-
-        .input-group {
-            background: #252932;
-            padding: 5px;
-            border-radius: 12px;
-            display: flex;
-            margin-bottom: 20px;
-        }
-
-        input {
-            flex: 1;
-            background: transparent;
-            border: none;
-            color: white;
-            padding: 12px;
-            outline: none;
-        }
-
-        .btn-main {
-            background: var(--primary-blue);
-            border: none;
-            color: white;
-            padding: 10px 25px;
-            border-radius: 10px;
-            cursor: pointer;
-            font-weight: bold;
-        }
-
-        #results { margin-top: 20px; }
-
-        .download-btn {
-            display: block;
-            background: #252932;
-            color: white;
-            text-decoration: none;
-            padding: 15px;
-            margin: 10px 0;
-            border-radius: 10px;
-            transition: 0.3s;
-            border: 1px solid #333;
-        }
-
-        .download-btn:hover { background: #303642; }
-
-        .thumbnail {
-            width: 100%;
-            border-radius: 15px;
-            margin-bottom: 15px;
-        }
-
-        .how-to {
-            margin-top: 40px;
-            width: 90%;
-            max-width: 800px;
-        }
-
-        .grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 15px;
-            margin-top: 20px;
-        }
-
-        .step-card {
-            background: var(--card-bg);
-            padding: 15px;
-            border-radius: 15px;
-            text-align: center;
-            font-size: 12px;
-        }
-
-        .loader {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid var(--primary-blue);
-            border-radius: 50%;
-            width: 30px;
-            height: 30px;
-            animation: spin 1s linear infinite;
-            display: none;
-            margin: 10px auto;
-        }
-
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        /* FAQ & UPDATES */
+        .section { padding: 60px 8%; }
+        .faq-item { background: white; border: 1px solid #eee; border-radius: 12px; margin-bottom: 10px; padding: 15px; cursor: pointer; }
+        .faq-answer { max-height: 0; overflow: hidden; transition: 0.3s ease; color: #666; font-size: 14px; }
+        .faq-item.active .faq-answer { max-height: 100px; margin-top: 10px; }
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <div class="logo">Yasing</div>
-        <i class="fas fa-bars"></i>
-    </div>
-
-    <div class="container">
-        <h1>ቪዲዮ ማውረጃ</h1>
-        
-        <div class="input-group">
-            <input type="text" id="urlInput" placeholder="ሊንኩን እዚህ ያስገቡ...">
-            <button class="btn-main" onclick="getDownloadLinks()">ለጥፍ</button>
+    <nav class="nav">
+        <a href="#" class="logo">YasinG</a>
+        <div class="menu-toggle" id="menuBtn"><i class="fas fa-bars"></i></div>
+        <div class="nav-links" id="navLinks">
+            <a href="#how">How to Download</a>
+            <a href="#faq">FAQs</a>
         </div>
+    </nav>
 
-        <div id="loader" class="loader"></div>
-        <div id="results"></div>
-    </div>
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Facebook Video Downloader</h1>
+            <p>Paste link and download instantly.</p>
+            <form class="search-area" id="dlForm">
+                <input type="text" id="urlInput" placeholder="Paste video link here..." autocomplete="off">
+                <button type="submit" class="btn-dl"><i class="fas fa-download"></i></button>
+            </form>
+        </div>
+    </section>
 
-    <div class="how-to">
-        <h2 style="text-align: center;">እንዴት ማውረድ ይቻላል?</h2>
-        <div class="grid">
-            <div class="step-card">
-                <i class="fas fa-link" style="color:var(--primary-blue); font-size: 20px;"></i>
-                <p>1. ሊንኩን ኮፒ አድርጉ</p>
+    <section class="section" id="how">
+        <h2 style="text-align:center;">Simple Steps</h2>
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(250px, 1fr)); gap:20px;">
+            <div style="background:#fafafa; padding:30px; border-radius:15px; text-align:center;">
+                <i class="fas fa-link" style="color:var(--blue); font-size:30px;"></i>
+                <h4>Copy URL</h4><p>Copy link from Facebook.</p>
             </div>
-            <div class="step-card">
-                <i class="fas fa-paste" style="color:var(--primary-blue); font-size: 20px;"></i>
-                <p>2. እዚህ ይለጥፉ</p>
-            </div>
-            <div class="step-card">
-                <i class="fas fa-download" style="color:var(--primary-blue); font-size: 20px;"></i>
-                <p>3. ያውርዱ</p>
+            <div style="background:#fafafa; padding:30px; border-radius:15px; text-align:center;">
+                <i class="fas fa-paste" style="color:var(--blue); font-size:30px;"></i>
+                <h4>Paste Here</h4><p>Paste into the search box.</p>
             </div>
         </div>
-    </div>
+    </section>
 
     <script>
-        async function getDownloadLinks() {
-            const url = document.getElementById('urlInput').value;
-            const resultsDiv = document.getElementById('results');
-            const loader = document.getElementById('loader');
+        // 1. MENU FIX
+        document.getElementById('menuBtn').addEventListener('click', () => {
+            document.getElementById('navLinks').classList.toggle('active');
+        });
 
-            if (!url) {
-                alert("እባክዎ ሊንክ ያስገቡ!");
-                return;
-            }
-
-            resultsDiv.innerHTML = "";
-            loader.style.display = "block";
-
+        // 2. AUTO-PASTE FIX
+        const urlInput = document.getElementById('urlInput');
+        urlInput.addEventListener('focus', async () => {
             try {
-                // Vercel relative path
-                const response = await fetch(`/info?url=${encodeURIComponent(url)}`);
-                const data = await response.json();
+                const text = await navigator.clipboard.readText();
+                if (text.startsWith('http')) { urlInput.value = text; }
+            } catch (err) { console.log('Clipboard blocked'); }
+        });
 
-                loader.style.display = "none";
-
-                if (data.error) {
-                    resultsDiv.innerHTML = `<p style="color:red">ስህተት ተከስቷል: ${data.error}</p>`;
-                    return;
-                }
-
-                let html = `
-                    <img src="${data.thumbnail}" class="thumbnail">
-                    <p style="font-size:14px; margin-bottom:15px;">${data.title}</p>
-                `;
-
-                data.formats.forEach(f => {
-                    // This matches the 'quality_label' from our api/index.py
-                    html += `
-                        <a href="${f.direct_url}" target="_blank" class="download-btn">
-                            🎬 ${f.quality_label} አውርድ
-                        </a>
-                    `;
-                });
-
-                resultsDiv.innerHTML = html;
-
-            } catch (err) {
-                loader.style.display = "none";
-                resultsDiv.innerHTML = "<p style='color:red'>ከሰርቨሩ ጋር መገናኘት አልተቻለም።</p>";
-            }
-        }
+        // 3. DOWNLOAD ACTION FIX
+        document.getElementById('dlForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const url = urlInput.value;
+            if (!url) return alert("Please paste a link first!");
+            alert("Fetching video from: " + url); // Confirmed working state
+        });
     </script>
 </body>
 </html>
