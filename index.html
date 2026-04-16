@@ -22,7 +22,7 @@
 
     <nav class="p-4 border-b border-zinc-800 bg-zinc-900/95 sticky top-0 z-[110] backdrop-blur-md">
         <div class="max-w-6xl mx-auto flex justify-between items-center">
-            <h1 class="text-3xl font-black text-blue-500 italic">Yasing</h1>
+            <h1 class="text-3xl font-black text-blue-500 italic"><i class="fab fa-facebook-f"></i> YasinG</h1>
             <div class="hidden md:flex flex-1 justify-end space-x-8 text-sm font-bold text-zinc-400">
                 <a href="#steps" class="hover:text-white transition">እንዴት እንደሚሰራ</a>
                 <a href="#news" class="hover:text-white transition">ዜናዎች</a>
@@ -91,6 +91,10 @@
                 <div class="text-blue-500 text-3xl"><i class="fas fa-rocket"></i></div>
                 <p class="text-zinc-400 text-sm">V2.5 Update: ቪዲዮዎችን በከፍተኛ ፍጥነት የሚያወርዱ አዳዲስ ሰርቨሮች ተጨምረዋል።</p>
             </div>
+          <div class="bg-zinc-900 p-6 rounded-3xl border border-zinc-800 flex items-center gap-6">
+                <div class="text-blue-500 text-3xl"><i class="fas fa-signal"></i></div>
+                <p class="text-zinc-400 text-sm">Facebook Update: ቪዲዮዎችን በከፍተኛ ፍጥነት የሚያወርዱ አዳዲስ ሰርቨሮች ተጨምረዋል።</p>
+            </div>
         </div>
     </section>
 
@@ -148,71 +152,82 @@
         </div>
     </footer>
 
-   <script>
-    function toggleMenu() { document.getElementById('navLinks').classList.toggle('active'); }
-    function toggleFaq(el) { el.classList.toggle('active'); }
+    <script>
+        function toggleMenu() { document.getElementById('mobile-menu').classList.toggle('hidden'); }
 
-    async function autoPaste() {
-        try {
-            const text = await navigator.clipboard.readText();
-            if(text.includes('http')) document.getElementById('urlInput').value = text;
-        } catch (e) {}
-    }
-
-    async function startDownload() {
-        const urlInput = document.getElementById('urlInput').value;
-        const loader = document.getElementById('loader');
-        const resultArea = document.getElementById('resultArea');
-        const dlLinks = document.getElementById('dlLinks');
-        const videoPlayer = document.getElementById('videoPlayer');
-
-        if (!urlInput) {
-            alert("Please paste a link first!");
-            return;
+        async function pasteLink() {
+            try {
+                const text = await navigator.clipboard.readText();
+                document.getElementById('url-input').value = text;
+            } catch (err) { alert("ሊንኩን ኮፒ ያድርጉ!"); }
         }
 
-        loader.style.display = "block";
-        resultArea.style.display = "none";
+        async function getFormats() {
+            const urlInput = document.getElementById('url-input').value;
+            const list = document.getElementById('quality-list');
+            const btn = document.getElementById('main-btn');
+            const spin = document.getElementById('loading-spinner');
+            const actions = document.getElementById('action-buttons');
 
-        try {
-            // Fetch data from our Python backend
-            const response = await fetch(`/info?url=${encodeURIComponent(urlInput)}`);
-            const data = await response.json();
+            if (!urlInput) { alert("ሊንክ ያስገቡ!"); return; }
 
-            loader.style.display = "none";
+            btn.classList.add('hidden');
+            spin.classList.remove('hidden');
+            list.innerHTML = "";
+            actions.classList.add('hidden');
 
-            if (data.error) {
-                alert("Error: " + data.error);
-                return;
+            try {
+                const response = await fetch(`/info?url=${encodeURIComponent(urlInput)}`);
+                const data = await response.json();
+                spin.classList.add('hidden');
+
+                if (data.error) {
+                    btn.classList.remove('hidden');
+                    alert("ቪዲዮው አልተገኘም!");
+                    return;
+                }
+
+                if (data.thumbnail) {
+                    list.innerHTML = `
+                        <div class="rounded-3xl overflow-hidden border border-zinc-700 bg-zinc-800 mb-6 relative group">
+                            <div id="player-container" class="relative aspect-video">
+                                <img src="${data.thumbnail}" class="w-full h-full object-cover opacity-60">
+                                <button onclick="startPlayer('${data.formats[0].url}')" class="absolute inset-0 flex items-center justify-center">
+                                    <div class="w-20 h-20 bg-blue-600 rounded-full flex items-center justify-center shadow-2xl group-hover:scale-110 transition-transform">
+                                        <i class="fas fa-play text-2xl ml-1 text-white"></i>
+                                    </div>
+                                </button>
+                            </div>
+                            <div class="p-4 text-xs font-bold text-zinc-400 text-center">${data.title}</div>
+                        </div>`;
+                }
+
+                data.formats.forEach(f => {
+                    list.innerHTML += `
+                        <a href="${f.url}" target="_blank" class="block w-full bg-blue-600/10 p-5 rounded-2xl border border-blue-600/20 hover:bg-blue-600 text-center font-black mb-3 transition-all text-white">
+                            🎬 ${f.quality} አውርድ
+                        </a>`;
+                });
+
+                actions.classList.remove('hidden');
+            } catch (error) {
+                spin.classList.add('hidden');
+                btn.classList.remove('hidden');
+                alert("የሰርቨር ስህተት!");
             }
-
-            // Display Results
-            resultArea.style.display = "block";
-            let html = `<h3 style="margin-bottom:15px;">${data.title}</h3>`;
-            
-            data.formats.forEach(f => {
-                html += `
-                    <a href="${f.url}" target="_blank" download 
-                       style="display:block; background:#2d6df6; color:white; padding:12px; margin:10px 0; border-radius:50px; text-decoration:none; font-weight:bold;">
-                       Download ${f.quality}
-                    </a>`;
-            });
-
-            dlLinks.innerHTML = html;
-            
-            // Set preview video
-            if (data.formats.length > 0) {
-                videoPlayer.src = data.formats[0].url;
-            }
-
-            resultArea.scrollIntoView({ behavior: 'smooth' });
-
-        } catch (err) {
-            loader.style.display = "none";
-            alert("Failed to connect to the server.");
         }
-    }
-</script>
 
+        function startPlayer(url) {
+            const container = document.getElementById('player-container');
+            container.innerHTML = `<video src="${url}" controls autoplay class="w-full h-full object-contain bg-black"></video>`;
+        }
+
+        function resetDownloader() {
+            document.getElementById('url-input').value = "";
+            document.getElementById('quality-list').innerHTML = "";
+            document.getElementById('action-buttons').classList.add('hidden');
+            document.getElementById('main-btn').classList.remove('hidden');
+        }
+    </script>
 </body>
 </html>
