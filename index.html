@@ -90,9 +90,11 @@
         /* --- 5. FOOTER RECOVERED --- */
         .footer { background: #0b0d11; color: white; padding: 60px 10% 30px; }
         .footer-content { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 30px; }
-        .footer-logo h3 { color: var(--blue); margin-bottom: 10px; }
+        .footer-logo { font-size: 22px; font-weight: bold; color: skyblue;  display:block; text-decoration:none; }
         .footer-links a { color: #888; text-decoration: none; display: block; margin-bottom: 8px; font-size: 14px; }
-
+          .social-icons { display: block; justify-content: center; gap: 30px; }
+        .social-icons a { color: var(--text-dim); font-size: 20px; transition: 0.3s; }
+        .social-icons a:hover { color: var(--blue); }
         @media (max-width: 768px) {
             .nav-links { display: none; position: absolute; top: 100%; right: 0; width: 220px; background: white; flex-direction: column; padding: 20px; box-shadow: -5px 5px 15px rgba(0,0,0,0.1); }
             .nav-links.active { display: flex; }
@@ -176,9 +178,16 @@
     <footer class="footer" id="contact">
         <div class="footer-content">
             <div class="footer-logo">
+            
+        <div class="social-icons">
+            <a href="#"><i class="fab fa-telegram"></i></a>
+            <a href="#"><i class="fab fa-facebook"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+        </div>
                 <h3>YasinG</h3>
                 <p style="color:#666; font-size:13px; max-width:250px;">ምርጥ የማህበራዊ ሚዲያ ቪዲዮ ማውረጃ።</p>
             </div>
+            
             <div class="footer-links">
                 <a href="#">Privacy Policy</a>
                 <a href="#">Terms of Service</a>
