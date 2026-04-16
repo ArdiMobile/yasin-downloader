@@ -2,7 +2,8 @@ from flask import Flask, request, jsonify, render_template
 import yt_dlp
 import os
 
-app = Flask(__name__, template_folder='../')
+# We point one level up for the HTML since index.py is in the /api folder
+app = Flask(__name__, template_folder='../', static_folder='../')
 
 @app.route('/')
 def index():
@@ -17,28 +18,20 @@ def get_info():
     ydl_opts = {
         'quiet': True,
         'no_warnings': True,
+        'format': 'best', # Gets the best single file with audio + video
+        'http_headers': {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+        }
     }
 
     try:
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             info = ydl.extract_info(url, download=False)
-            formats = []
-            for f in info.get('formats', []):
-                # Filter for useful formats with direct links
-                if f.get('url'):
-                    formats.append({
-                        'format_id': f.get('format_id'),
-                        'extension': f.get('ext'),
-                        'resolution': f.get('resolution') or f.get('format_note'),
-                        'url': f.get('url')
-                    })
             
             return jsonify({
-                "title": info.get('title'),
+                "title": info.get('title', 'Facebook Video'),
                 "thumbnail": info.get('thumbnail'),
-                "formats": formats
+                "video_url": info.get('url')
             })
     except Exception as e:
         return jsonify({"error": str(e)}), 500
-
-# DO NOT add app.run() here. Vercel handles the execution.
