@@ -1,6 +1,6 @@
 {
   "rewrites": [
     { "source": "/info", "destination": "/api/index.py" },
-    { "source": "/(.*)", "destination": "yasing.com.et" }
+    { "source": "/(.*)", "destination": "/index.html" }
   ]
 }
