@@ -1,11 +1,5 @@
 {
   "version": 2,
-  "builds": [
-    {
-      "src": "api/index.py",
-      "use": "@vercel/python"
-    }
-  ],
   "rewrites": [
     {
       "source": "/api/(.*)",
@@ -13,7 +7,7 @@
     }
   ],
   "functions": {
-    "api/*.py": {
+    "api/**/*.py": {
       "maxDuration": 60,
       "memory": 1024
     }
