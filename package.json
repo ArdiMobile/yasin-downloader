@@ -2,11 +2,13 @@
   "name": "fb-downloader",
   "version": "0.1.0",
   "private": true,
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start"
-  },
+"scripts": {
+  "dev": "next dev",
+  "build": "next build",
+  "start": "next start",
+  "pages:build": "npx @cloudflare/next-on-pages"
+},
+
   "dependencies": {
     "next": "latest",
     "react": "latest",
